@@ -29,6 +29,7 @@ export async function postRegistro(request, env, ctx) {
 
   const yaExiste = await env.DB.prepare("SELECT id, token FROM registros WHERE email = ?").bind(email).first();
 
+  const eventoId = texto(cuerpo.eventId, 100) || crypto.randomUUID();
   let idRegistro, token;
   if (yaExiste) {
     // Un formulario público no acredita ser dueña de un correo existente.
@@ -52,7 +53,7 @@ export async function postRegistro(request, env, ctx) {
       texto(cuerpo.utm_source, 100), texto(cuerpo.utm_medium, 100), texto(cuerpo.utm_campaign, 100),
       texto(cuerpo.utm_content, 100), texto(cuerpo.utm_term, 100), texto(cuerpo.fbclid, 200),
       texto(cuerpo.fbp, 100), texto(cuerpo.fbc, 100), texto(cuerpo.landing, 300), texto(cuerpo.referrer, 300),
-      texto(cuerpo.eventId, 100), ip, ua, env.TALLER_ACTUAL || "taller-1"
+      eventoId, ip, ua, env.TALLER_ACTUAL || "taller-1"
     ).run();
     idRegistro = res.meta.last_row_id;
   }
@@ -61,7 +62,7 @@ export async function postRegistro(request, env, ctx) {
   const enlaceBiblioteca = `${env.SITE_URL}/biblioteca/?t=${tokenAcceso}`;
 
   // El correo se manda sin bloquear la respuesta al navegador (más rápido para quien se registra).
-  const registroParaMeta = { email, whatsapp, eventId: cuerpo.eventId, fbp: cuerpo.fbp, fbc: cuerpo.fbc,
+  const registroParaMeta = { email, whatsapp, eventId: eventoId, fbp: cuerpo.fbp, fbc: cuerpo.fbc,
     pagina: cuerpo.pagina, utm_source: cuerpo.utm_source, utm_campaign: cuerpo.utm_campaign };
   const tareas = Promise.all([
     enviarCorreo(env, { para: email, asunto: "Tu acceso a Cancún Cero Cáncer", html: correoBienvenida({ nombre, enlaceBiblioteca, siteUrl: env.SITE_URL }) })
@@ -71,5 +72,5 @@ export async function postRegistro(request, env, ctx) {
   ]);
   if (ctx?.waitUntil) ctx.waitUntil(tareas); else await tareas;
 
-  return json({ ok: true, token: tokenAcceso, correoHabilitado: !!env.RESEND_API_KEY });
+  return json({ ok: true, nuevo: true, evento_id: eventoId, token: tokenAcceso, correoHabilitado: !!env.RESEND_API_KEY });
 }

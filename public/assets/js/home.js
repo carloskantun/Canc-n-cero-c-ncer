@@ -243,7 +243,7 @@
       }).then(function (res) {
         if (!res.ok || !res.j.ok) throw new Error(res.j.mensaje || "No pudimos completar tu registro.");
         if (res.j.token) C.guardar("localStorage", "ccc_acceso", { token: res.j.token, nombre: datos.nombre });
-        C.guardar("sessionStorage", "ccc_lead", { nombre: datos.nombre, eventId: eventId, pendienteEvento: true, correoHabilitado: !!res.j.correoHabilitado });
+        C.guardar("sessionStorage", "ccc_lead", { nombre: datos.nombre, eventId: res.j.evento_id || eventId, pendienteEvento: res.j.nuevo === true, correoHabilitado: !!res.j.correoHabilitado });
         location.href = "/gracias/";
       }).catch(function (err) {
         mostrarError(err.message && err.message.indexOf("Failed") === -1 ? err.message : "No pudimos completar tu registro en este momento.");

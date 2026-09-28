@@ -2,11 +2,10 @@
    - apiBase: dónde vive el Worker de Cloudflare.
        "/api"                                → si el dominio pasa por Cloudflare y el Worker tiene la ruta cancuncerocancer.com/api/*
        "https://api.cancuncerocancer.com/api" → si el Worker vive en un subdominio
-   - metaPixelId: ID del Pixel de Meta. Vacío = no se carga el Pixel.
+   - El Pixel se configura en content/sitio.json → meta.pixel_id.
 */
 window.CCC_CONFIG = {
   apiBase: "https://cancuncerocancer-api.carloskantun.workers.dev/api",
-  metaPixelId: "",
   correoHabilitado: false,
   contenido: "/content/sitio.json"
 };

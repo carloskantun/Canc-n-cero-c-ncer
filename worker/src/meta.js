@@ -1,5 +1,5 @@
 // API de Conversiones de Meta (server-side). Es opcional: si no hay
-// META_PIXEL_ID y META_ACCESS_TOKEN configurados (wrangler secret), no se
+// FB_PIXEL_ID y FB_CAPI_TOKEN configurados (admite los nombres META_* anteriores), no se
 // envía nada y el sitio sigue funcionando normal con solo el Pixel del navegador.
 // Usa el mismo eventId que manda el navegador para que Meta deduplique
 // el evento del Pixel y el de esta API como uno solo.
@@ -12,7 +12,9 @@ async function sha256Hex(texto) {
 }
 
 export async function enviarEventoLead(env, registro, request) {
-  if (!env.META_PIXEL_ID || !env.META_ACCESS_TOKEN) {
+  const pixelId = env.FB_PIXEL_ID || env.META_PIXEL_ID;
+  const accessToken = env.FB_CAPI_TOKEN || env.META_ACCESS_TOKEN;
+  if (!pixelId || !accessToken) {
     console.log("[meta] CAPI no configurado; se omite el envío server-side.");
     return { enviado: false, motivo: "sin_configurar" };
   }
@@ -31,26 +33,26 @@ export async function enviarEventoLead(env, registro, request) {
         event_time: Math.floor(Date.now() / 1000),
         event_id: registro.eventId || undefined,
         action_source: "website",
-        event_source_url: registro.pagina || env.SITE_URL,
+        event_source_url: env.SITE_URL,
         user_data: userData,
         custom_data: {
-          content_name: "Registro taller",
-          utm_source: registro.utm_source || undefined,
-          utm_campaign: registro.utm_campaign || undefined
+          content_name: "Registro taller"
         }
       }]
     };
+    if (env.FB_TEST_EVENT_CODE) payload.test_event_code = env.FB_TEST_EVENT_CODE;
+    const version = env.FB_API_VERSION || "v22.0";
     const resp = await fetch(
-      `https://graph.facebook.com/v20.0/${env.META_PIXEL_ID}/events?access_token=${encodeURIComponent(env.META_ACCESS_TOKEN)}`,
-      { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) }
+      `https://graph.facebook.com/${version}/${encodeURIComponent(pixelId)}/events`,
+      { method: "POST", headers: { "content-type": "application/json", "authorization": `Bearer ${accessToken}` }, body: JSON.stringify(payload), signal: AbortSignal.timeout(8000) }
     );
     if (!resp.ok) {
-      console.error("[meta] CAPI respondió con error:", resp.status, await resp.text().catch(() => ""));
+      console.error("[meta] CAPI respondió con error:", resp.status);
       return { enviado: false, motivo: "error_meta" };
     }
     return { enviado: true };
   } catch (err) {
-    console.error("[meta] Error enviando evento:", err);
+    console.error("[meta] Error enviando evento:", err.name);
     return { enviado: false, motivo: "excepcion" };
   }
 }

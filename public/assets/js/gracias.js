@@ -31,7 +31,7 @@
 
     // Evento de conversión: solo una vez por registro (mismo eventId que manda el Worker por la API de Conversiones).
     if (lead.pendienteEvento && lead.eventId) {
-      C.evento("Lead", { content_name: "Registro taller" }, lead.eventId);
+      window.fbqLead(lead.eventId);
       lead.pendienteEvento = false;
       C.guardar("sessionStorage", "ccc_lead", lead);
     }

@@ -153,8 +153,8 @@ de navegador tipo "ModHeader", Postman, o `curl -O -H "authorization: Bearer ...
 | `META_PIXEL_ID` | secreto | `wrangler secret put` | No (sin esto, no hay API de Conversiones server-side) |
 | `META_ACCESS_TOKEN` | secreto | `wrangler secret put` | No |
 
-En `public/assets/js/config.js` está `metaPixelId` (el ID del Pixel, para el
-navegador) y `apiBase` (dónde vive la API — normalmente `/api`, no hace falta
+En `public/content/sitio.json` está `meta.pixel_id` (el ID del Pixel, para el
+navegador). En `public/assets/js/config.js` está `apiBase` (dónde vive la API — normalmente `/api`, no hace falta
 tocarlo si el Worker usa la ruta `cancuncerocancer.com/api/*`).
 
 ---
@@ -192,3 +192,58 @@ en el mismo VPS, replicando las mismas tres
 rutas (`/api/registro`, `/api/acceso`, `/api/biblioteca`) con la misma forma
 de entrada y salida que usa `worker/src/`. Avisar a Carlos antes de tomar ese
 camino: implica escribir ese backend PHP y ajustar `apiBase` en `config.js`.
+
+## Meta Pixel, CAPI y exportación de leads
+
+El frontend sigue siendo HTML/CSS/JS sin build ni React. `npm` se usa solo en
+`worker/` para Wrangler y las pruebas (`npm test`, `npm run deploy`).
+
+- Poner el ID público en `public/content/sitio.json` → `meta.pixel_id`. Vacío
+  desactiva el Pixel. `common.js`, incluido en todas las páginas, lo carga una
+  vez y emite PageView; ViewContent solo en `/` o `/index.html`.
+- `window.fbqLead(eventoId)` emite Lead una sola vez por ID en esa página. El
+  formulario guarda el ID confirmado por el servidor y `/gracias/` lo emite
+  solo para registros nuevos, no al recuperar acceso ni al recargar.
+- Configurar `FB_PIXEL_ID` (el mismo ID) y `FB_CAPI_TOKEN` con
+  `wrangler secret put` en `worker/`. Los nombres anteriores `META_PIXEL_ID`
+  y `META_ACCESS_TOKEN` siguen admitidos; los `FB_*` tienen prioridad.
+- CAPI usa el mismo `evento_id` que el Pixel; envía email/teléfono con SHA-256,
+  IP, user agent y cookies de atribución. No envía nombres, edades, tokens de
+  biblioteca, consultas de URL, nombres de campaña ni información médica.
+  No activar la coincidencia avanzada automática desde Events Manager sin
+  revisar qué datos recopilaría. Revisar allí las restricciones que Meta
+  aplique a esta fuente de datos antes de lanzar campañas.
+- `FB_API_VERSION` fija la versión de Graph API. Para comprobar deduplicación
+  en Events Manager se puede configurar temporalmente `FB_TEST_EVENT_CODE`;
+  eliminar ese secreto después de la prueba. Sin credenciales, registrar
+  personas sigue funcionando y no se envían eventos a Meta.
+
+La tabla `leads` tiene `id, nombre, whatsapp, email, origen, created_at,
+evento_id`. Es una proyección sincronizada de `registros` mediante triggers:
+no es un segundo formulario ni cambia los IDs o el acceso a la biblioteca.
+La migración incorpora los registros anteriores sin enviar Leads históricos.
+`origen` se deriva de `utm_source`: fb/facebook → fb, ig/instagram → ig,
+cualquier otro valor → organico (los UTM originales se conservan en registros).
+En las campañas usar `utm_source={{site_source_name}}` para distinguir fb/ig.
+
+Antes de actualizar una instalación existente, respaldar D1 fuera del repo y
+aplicar una vez la migración aditiva:
+
+```bash
+cd worker
+wrangler d1 export ccc_db --remote --output /RUTA_PRIVADA/ccc-pre-leads.sql
+wrangler d1 execute ccc_db --remote --file migrations/0001_leads.sql
+npm test
+npm run deploy
+```
+
+Para instalaciones nuevas, `schema.sql` ya incluye esa tabla y sus triggers.
+`worker/content/biblioteca.json` no se modifica.
+
+`GET /api/leads` devuelve JSON; `?format=csv` devuelve CSV para Excel. Usar la
+URL directa `https://cancuncerocancer-api.carloskantun.workers.dev/api/leads`
+y `Authorization: Bearer ADMIN_TOKEN` o `Authorization: Bearer ADMIN_KEY`.
+También se admite `?key=ADMIN_KEY` como se solicitó, pero esa clave puede
+quedar en historial y registros del servidor: no publicar ni compartir ese
+enlace. La clave es un secreto separado, configurado con
+`wrangler secret put ADMIN_KEY`. Respuestas de exportación: `no-store`.

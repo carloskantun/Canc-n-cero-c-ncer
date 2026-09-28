@@ -2,6 +2,7 @@
 // El sitio (HTML/CSS/JS) se sirve aparte, desde el hosting normal (VPS/Cloudflare Pages).
 // Este Worker solo atiende las rutas que necesitan servidor: registro, acceso y biblioteca.
 
+import { getLeads } from "./rutas/leads.js";
 import { json, preflight } from "./util.js";
 import { postRegistro } from "./rutas/registro.js";
 import { postAcceso } from "./rutas/acceso.js";
@@ -17,6 +18,7 @@ export default {
     if (metodo === "OPTIONS") return preflight();
 
     try {
+      if (ruta === "/api/leads" && metodo === "GET") return await getLeads(request, env);
       if (ruta === "/api/registro" && metodo === "POST") return await postRegistro(request, env, ctx);
       if (ruta === "/api/acceso" && metodo === "POST") return await postAcceso(request, env, ctx);
       if (ruta === "/api/biblioteca" && metodo === "GET") return await getBiblioteca(request, env);

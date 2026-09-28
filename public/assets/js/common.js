@@ -6,6 +6,15 @@
   var CFG = window.CCC_CONFIG || {};
   var CCC = (window.CCC = {});
 
+  // Retirar credenciales de la URL antes de atribución o scripts de terceros.
+  var urlActual = new URL(location.href);
+  CCC.tokenUrl = urlActual.searchParams.get("t");
+  if (urlActual.searchParams.has("t") || urlActual.searchParams.has("key")) {
+    urlActual.searchParams.delete("t");
+    urlActual.searchParams.delete("key");
+    history.replaceState(null, "", urlActual.pathname + urlActual.search + urlActual.hash);
+  }
+
   /* ---------- Utilidades ---------- */
   CCC.esc = function (s) {
     return String(s == null ? "" : s)
@@ -141,8 +150,11 @@
   };
 
   /* ---------- Pixel de Meta ---------- */
-  CCC.pixel = function () {
-    if (!CFG.metaPixelId || window.fbq) return;
+  var pixelIniciado = false;
+  CCC.pixel = function (sitio) {
+    var id = String((sitio.meta || {}).pixel_id || "").trim();
+    if (!/^\d+$/.test(id) || pixelIniciado) return;
+    pixelIniciado = true;
     /* eslint-disable */
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -150,13 +162,25 @@
     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
     document,'script','https://connect.facebook.net/en_US/fbevents.js');
     /* eslint-enable */
-    window.fbq("init", CFG.metaPixelId);
+    window.fbq("set", "autoConfig", false, id);
+    window.fbq("init", id);
     window.fbq("track", "PageView");
+    if (location.pathname === "/" || location.pathname === "/index.html") {
+      window.fbq("track", "ViewContent", { content_name: "Taller" });
+    }
   };
   CCC.evento = function (nombre, datos, eventId) {
     if (window.fbq) window.fbq("track", nombre, datos || {}, eventId ? { eventID: eventId } : undefined);
   };
-  CCC.pixel();
+  var leadsEmitidos = {};
+  window.fbqLead = function (eventId) {
+    if (!pixelIniciado || !eventId || leadsEmitidos[eventId]) return false;
+    leadsEmitidos[eventId] = true;
+    CCC.evento("Lead", { content_name: "Registro taller" }, eventId);
+    return true;
+  };
+  // Esta carga compartida cubre todas las páginas, no solo index.html.
+  CCC.contenido().then(CCC.pixel).catch(function () {});
 
   /* ---------- Encabezado, pie y WhatsApp ---------- */
   function marca(blanca) {

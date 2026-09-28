@@ -6,7 +6,7 @@
   var e = C.esc;
 
   var params = new URLSearchParams(location.search);
-  var tokenUrl = params.get("t");
+  var tokenUrl = C.tokenUrl || params.get("t");
   var guardado = C.leer("localStorage", "ccc_acceso") || {};
   var token = tokenUrl || guardado.token;
 
@@ -29,7 +29,6 @@
       })
       .then(function (data) {
         C.guardar("localStorage", "ccc_acceso", { token: token, nombre: data.nombre || guardado.nombre || "" });
-        C.evento("ViewContent", { content_name: "Biblioteca" });
         pintar(s, data);
       })
       .catch(function (err) {
