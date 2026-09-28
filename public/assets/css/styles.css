@@ -161,7 +161,16 @@ p { margin: 0 0 1em; }
   background: linear-gradient(135deg, var(--turquesa-claro), var(--verde-claro) 60%, var(--coral-claro));
   border-radius: var(--radio);
 }
-.media img, .media picture { width: 100%; height: 100%; object-fit: cover; }
+.media picture { display: block; width: 100%; height: 100%; }
+.media img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: var(--imagen-posicion, 50% 50%);
+}
+/* Conservar rostros al recortar fotos cuadradas o apaisadas en estos marcos. */
+.media[data-img="hero-principal"],
+.media[data-img="pilar-movimiento"],
+.media[data-img="pilar-prevencion"] { --imagen-posicion: 50% 0%; }
+.media[data-img="categoria-cardio"] { --imagen-posicion: 20% 50%; }
 .media--vacia::before {
   content: ""; position: absolute; inset: 0;
   background-image:

@@ -24,6 +24,8 @@ SITE_URL = "https://cancuncerocancer.com"
 TALLER_ACTUAL = "taller-1"
 # Versión explícita de Graph API; actualizar según el ciclo de soporte de Meta.
 FB_API_VERSION = "v22.0"
+# ID público, igual a public/content/sitio.json → meta.pixel_id.
+FB_PIXEL_ID = "1834326414233144"
 # Correo remitente para los envíos (debe estar verificado en el proveedor de correo).
 CORREO_REMITENTE = "Cancún Cero Cáncer <hola@cancuncerocancer.com>"
 
@@ -34,7 +36,7 @@ CORREO_REMITENTE = "Cancún Cero Cáncer <hola@cancuncerocancer.com>"
 # wrangler secret put META_PIXEL_ID        -> (opcional) para la API de Conversiones
 # wrangler secret put META_ACCESS_TOKEN    -> (opcional) para la API de Conversiones
 
-# wrangler secret put FB_PIXEL_ID       -> mismo ID que sitio.json → meta.pixel_id
+# FB_PIXEL_ID en [vars] es el mismo ID público que sitio.json → meta.pixel_id
 # wrangler secret put FB_CAPI_TOKEN     -> token CAPI, nunca en public/
 # wrangler secret put ADMIN_KEY         -> clave separada para /api/leads
 # wrangler secret put FB_TEST_EVENT_CODE -> solo durante pruebas de Events Manager

@@ -204,8 +204,9 @@ El frontend sigue siendo HTML/CSS/JS sin build ni React. `npm` se usa solo en
 - `window.fbqLead(eventoId)` emite Lead una sola vez por ID en esa página. El
   formulario guarda el ID confirmado por el servidor y `/gracias/` lo emite
   solo para registros nuevos, no al recuperar acceso ni al recargar.
-- Configurar `FB_PIXEL_ID` (el mismo ID) y `FB_CAPI_TOKEN` con
-  `wrangler secret put` en `worker/`. Los nombres anteriores `META_PIXEL_ID`
+- `FB_PIXEL_ID` ya está en `[vars]` de `worker/wrangler.toml` con el mismo ID
+  público de `sitio.json`. Configurar `FB_CAPI_TOKEN` con `wrangler secret put`
+  en `worker/`. Los nombres anteriores `META_PIXEL_ID`
   y `META_ACCESS_TOKEN` siguen admitidos; los `FB_*` tienen prioridad.
 - CAPI usa el mismo `evento_id` que el Pixel; envía email/teléfono con SHA-256,
   IP, user agent y cookies de atribución. No envía nombres, edades, tokens de

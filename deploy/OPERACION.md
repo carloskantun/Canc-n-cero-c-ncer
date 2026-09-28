@@ -68,5 +68,10 @@ autorización y rechazo 401 sin ella. Los archivos frontend coinciden con Git.
 Se intentó `npm run deploy` con Wrangler 4.142, pero quedó sin salida; se
 completó mediante Wrangler 4.105, la alternativa documentada arriba.
 
-Activación Meta pendiente: completar `meta.pixel_id` y configurar
-`FB_PIXEL_ID` y `FB_CAPI_TOKEN`; aún no se comprobó recepción en Events Manager.
+Pixel del navegador configurado con el ID `1834326414233144`, recibido del
+responsable del sitio. El mismo ID está en `FB_PIXEL_ID` del Worker. CAPI sigue
+pendiente de `FB_CAPI_TOKEN`; la recepción final se revisa en Events Manager.
+
+El encuadre de portada, Movimiento y Prevención se alinea arriba para conservar
+los rostros; Cardio se centra sobre la persona. Se mantiene `object-fit: cover`
+y las proporciones de las tarjetas. Revisado en escritorio y móvil de 390 px.
