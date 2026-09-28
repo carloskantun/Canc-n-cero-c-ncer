@@ -32,7 +32,7 @@ La reversión solo afecta archivos estáticos. D1 y sus registros permanecen int
 
 ## API y correo
 
-Instalar dependencias mediante `npm ci` en `worker/`. Usar Wrangler 4 y `wrangler deploy` para cambios de API. La versión 4.142 instalada validó el paquete y las pruebas locales; la publicación se completó con la 4.105 disponible en el equipo porque el proceso de publicación de 4.142 quedó detenido sin salida. Worker publicado: versión `0fcc0e42-071b-4d1e-8ddf-6d655a59eae4`.
+Instalar dependencias mediante `npm ci` en `worker/`. Usar Wrangler 4 y `wrangler deploy` para cambios de API. La versión 4.142 instalada validó el paquete y las pruebas locales; la publicación se completó con la 4.105 disponible en el equipo porque el proceso de publicación de 4.142 quedó detenido sin salida. Worker inicial: versión `0fcc0e42-071b-4d1e-8ddf-6d655a59eae4`.
 
 No volver a crear la base ni cambiar sus tablas sin revisar y respaldar datos. No cambiar `TOKEN_SECRETO` sin planificar la invalidación de los enlaces emitidos.
 
@@ -51,3 +51,22 @@ Las imágenes son ilustrativas generadas, no fotografías de participantes reale
 ## Contenido pendiente de la organización
 
 Fechas, horario y costo del taller; WhatsApp y redes; videos de YouTube; validación médica señalada por el propio contenido. No se inventaron valores ni se desbloquearon semanas futuras.
+
+
+## Actualización Meta — 28-sep-2026
+
+Código `4c98485`: Pixel configurable en `sitio.json`, eventos deduplicados y
+exportación `/api/leads`. Worker `de0b68dc-6775-40f1-abd0-b17437df229d`.
+Migración `0001_leads.sql` aplicada después de exportar y verificar D1; los
+registros anteriores permanecen intactos. Clave `ADMIN_KEY` creada como secreto.
+La web se publicó por intercambio atómico; la versión anterior se conserva en
+`/root/ccc-clean-releases/retired-20260928T045329414564Z`.
+
+Pasaron las pruebas de Pixel/CAPI (proveedor simulado), autorización, CSV,
+registro duplicado y migración. En producción se comprobaron JSON/CSV con
+autorización y rechazo 401 sin ella. Los archivos frontend coinciden con Git.
+Se intentó `npm run deploy` con Wrangler 4.142, pero quedó sin salida; se
+completó mediante Wrangler 4.105, la alternativa documentada arriba.
+
+Activación Meta pendiente: completar `meta.pixel_id` y configurar
+`FB_PIXEL_ID` y `FB_CAPI_TOKEN`; aún no se comprobó recepción en Events Manager.
