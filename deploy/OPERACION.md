@@ -69,8 +69,10 @@ Se intentó `npm run deploy` con Wrangler 4.142, pero quedó sin salida; se
 completó mediante Wrangler 4.105, la alternativa documentada arriba.
 
 Pixel del navegador configurado con el ID `1834326414233144`, recibido del
-responsable del sitio. El mismo ID está en `FB_PIXEL_ID` del Worker. CAPI sigue
-pendiente de `FB_CAPI_TOKEN`; la recepción final se revisa en Events Manager.
+responsable del sitio. El mismo ID está en `FB_PIXEL_ID` del Worker.
+`FB_CAPI_TOKEN` se configuró como secreto en Cloudflare el 28-sep-2026, sin
+guardarlo en Git ni archivos locales. La recepción de una conversión real y
+su deduplicación aún deben comprobarse en Events Manager.
 
 El encuadre de portada, Movimiento y Prevención se alinea arriba para conservar
 los rostros; Cardio se centra sobre la persona. Se mantiene `object-fit: cover`
