@@ -1,6 +1,6 @@
 import { postAcceso } from "./acceso.js";
 import { json, texto, esEmailValido, normalizarWhatsApp, crearToken, idAleatorio, limitarPorIp } from "../util.js";
-import { enviarCorreo, correoBienvenida } from "../correo.js";
+import { correoHabilitado, enviarCorreo, correoBienvenida } from "../correo.js";
 import { enviarEventoLead } from "../meta.js";
 
 export async function postRegistro(request, env, ctx) {
@@ -72,5 +72,5 @@ export async function postRegistro(request, env, ctx) {
   ]);
   if (ctx?.waitUntil) ctx.waitUntil(tareas); else await tareas;
 
-  return json({ ok: true, nuevo: true, evento_id: eventoId, token: tokenAcceso, correoHabilitado: !!env.RESEND_API_KEY });
+  return json({ ok: true, nuevo: true, evento_id: eventoId, token: tokenAcceso, correoHabilitado: correoHabilitado(env) });
 }

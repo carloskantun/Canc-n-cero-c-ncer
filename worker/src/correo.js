@@ -1,9 +1,14 @@
+// Permite guardar la clave antes de completar la verificación del remitente.
+export function correoHabilitado(env) {
+  return !!env.RESEND_API_KEY && env.CORREO_HABILITADO !== "false";
+}
+
 // Envío de correo con Resend (https://resend.com). Si no hay RESEND_API_KEY
 // configurado (wrangler secret), simplemente no se envía y se avisa en el log,
 // para que el sitio siga funcionando en desarrollo sin cuenta de correo.
 
 export async function enviarCorreo(env, { para, asunto, html }) {
-  if (!env.RESEND_API_KEY) {
+  if (!correoHabilitado(env)) {
     console.log("[correo] Proveedor no configurado; no se envía.");
     return { enviado: false, motivo: "sin_configurar" };
   }

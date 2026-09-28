@@ -1,5 +1,5 @@
 import { json, texto, esEmailValido, crearToken, limitarPorIp } from "../util.js";
-import { enviarCorreo, correoAcceso } from "../correo.js";
+import { correoHabilitado, enviarCorreo, correoAcceso } from "../correo.js";
 
 // POST /api/acceso  { email }
 // Siempre responde "ok" exista o no el correo, para no revelar quién está
@@ -15,7 +15,7 @@ export async function postAcceso(request, env, ctx) {
     return json({ ok: false, mensaje: "Demasiados intentos. Intenta de nuevo en un rato." }, 429);
   }
 
-  if (!env.RESEND_API_KEY) {
+  if (!correoHabilitado(env)) {
     return json({ ok: false, mensaje: "El envío de enlaces por correo aún no está disponible. Si ya te registraste, usa el dispositivo donde lo hiciste." }, 503);
   }
 

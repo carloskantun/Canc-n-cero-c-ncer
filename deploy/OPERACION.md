@@ -36,7 +36,7 @@ Instalar dependencias mediante `npm ci` en `worker/`. Usar Wrangler 4 y `wrangle
 
 No volver a crear la base ni cambiar sus tablas sin revisar y respaldar datos. No cambiar `TOKEN_SECRETO` sin planificar la invalidación de los enlaces emitidos.
 
-Resend: `RESEND_API_KEY` configurada como secreto en Cloudflare. Dominio de envío `cancuncerocancer.com` creado; registros dedicados `resend._domainkey` (TXT), `send` (TXT/MX) y `rsend` (CNAME) publicados en el DNS del VPS. El MX y SPF de Google existentes se conservan. Pendiente de verificación del proveedor y prueba autorizada a `hola@cancuncerocancer.com`; hasta completarla, `correoHabilitado` del frontend permanece en `false`.
+Resend: `RESEND_API_KEY` configurada como secreto en Cloudflare. Dominio de envío `cancuncerocancer.com` creado; registros dedicados `resend._domainkey` (TXT), `send` (TXT/MX) y `rsend` (CNAME) publicados en el DNS del VPS. El MX y SPF de Google existentes se conservan. Pendiente de verificación del proveedor y prueba autorizada a `hola@cancuncerocancer.com`; hasta completarla, `CORREO_HABILITADO` del Worker y `correoHabilitado` del frontend permanecen en `false`. Así, guardar la clave no promete envíos antes de verificar el dominio. Tras la prueba, cambiar ambos a `true` y desplegar Worker y web.
 
 El registro duplicado ya no modifica los datos de otra persona ni entrega su token. Los correos escapan nombres, no registran direcciones en el mensaje de proveedor ausente y solo se anotan como enviados cuando el proveedor confirma. Las respuestas JSON privadas no se cachean.
 
