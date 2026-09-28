@@ -257,3 +257,9 @@ Acepta `ADMIN_KEY` o `ADMIN_TOKEN`. La clave se envía en Authorization y solo
 permanece en memoria; cerrar sesión o recargar borra el acceso. El panel no
 carga Meta Pixel ni incluye los contactos en los archivos públicos.
 Los formularios continúan guardando automáticamente en D1.
+
+El panel ofrece acciones manuales por contacto: “Escribir por WhatsApp” abre
+una conversación con el número mexicano registrado, y “Compartir con el doctor”
+abre WhatsApp para elegir destinatario con nombre y teléfono preparados.
+La persona que atiende revisa y confirma el envío. No usa WhatsApp API ni
+automatiza mensajes. El CSV permite compartir la lista completa por separado.
