@@ -1,7 +1,11 @@
 > **Producción desde 28-sep-2026:** consultar `deploy/OPERACION.md` antes de desplegar.
 > El sitio vive en `/home/cancuncerocancer/public_html` (VPS-KANTUN), la API en
 > `https://cancuncerocancer-api.carloskantun.workers.dev/api` y D1 ya está creada.
-> El DNS sigue en el VPS. No repetir la creación de D1 ni restaurar WordPress.
+> El dominio no está en modo proxy de Cloudflare: Apache redirige `/api/*` con
+> **307** a `https://cancuncerocancer-api.carloskantun.workers.dev/api/*` mediante
+> `deploy/site.htaccess`. No hay una Workers Route nativa; se conservaron DNS y correo
+> existentes. El frontend usa directamente esa URL del Worker (`config.js`).
+> No repetir la creación de D1 ni restaurar WordPress.
 > Excluir siempre `assets/img/_variantes/` y `README.md` al publicar `public/`.
 
 # Despliegue — Cancún Cero Cáncer
@@ -46,10 +50,11 @@ que el document root del dominio apunte a `canc-n-cero-c-ncer/public/`.
 
 ## 2. Desplegar el Worker + base de datos (Cloudflare)
 
-Requiere una cuenta de Cloudflare con el dominio `cancuncerocancer.com` ya
-apuntando a Cloudflare (DNS en modo proxy/naranja) — igual que otros proyectos
-de Carlos. Si el dominio NO está en Cloudflare todavía, ver la sección
-"Alternativa sin Cloudflare Workers" al final.
+Requiere una cuenta de Cloudflare. En producción se usa `workers.dev`, por lo
+que no hace falta mover el dominio a Cloudflare. Solo una futura Workers Route
+nativa requiere una zona de Cloudflare con el dominio en modo proxy/naranja.
+La base y los secretos de firma y administración ya existen; para actualizar,
+usar la sección "Actualizar el Worker cuando haya cambios de código".
 
 ```bash
 cd worker
@@ -80,19 +85,18 @@ npx wrangler secret put META_ACCESS_TOKEN
 npm run deploy
 ```
 
-Wrangler crea automáticamente la ruta `cancuncerocancer.com/api/*` definida en
-`wrangler.toml` (bloque `[[routes]]`). Si el despliegue avisa que no pudo
-crear la ruta, entrar al dashboard de Cloudflare → el dominio → **Workers
-Routes** → agregar `cancuncerocancer.com/api/*` apuntando al Worker
-`cancuncerocancer-api`.
+El `wrangler.toml` actual usa `workers_dev = true` y no contiene `[[routes]]`.
+Apache mantiene la redirección 307 descrita arriba. Si se migra el dominio al
+proxy de Cloudflare, se podrá configurar entonces una Workers Route nativa
+`cancuncerocancer.com/api/*` hacia `cancuncerocancer-api`.
 
 **Checklist después de desplegar el Worker:**
 ```bash
-curl https://cancuncerocancer.com/api/salud
+curl https://cancuncerocancer-api.carloskantun.workers.dev/api/salud
 # debe responder: {"ok":true,"servicio":"cancuncerocancer-api"}
 ```
 - [ ] Llenar el formulario de la landing de verdad y confirmar que llega el registro:
-      `curl -H "authorization: Bearer TU_ADMIN_TOKEN" https://cancuncerocancer.com/api/admin/registros`
+      `curl -H "authorization: Bearer TU_ADMIN_TOKEN" https://cancuncerocancer-api.carloskantun.workers.dev/api/admin/registros`
 - [ ] Si se configuró `RESEND_API_KEY`, confirmar que llegó el correo de bienvenida.
 - [ ] Probar `/acceso/` con ese mismo correo y confirmar que llega el correo de acceso.
 - [ ] Entrar a `/biblioteca/` con el enlace del correo y confirmar que carga el contenido de la Semana 1.
@@ -127,9 +131,11 @@ cd worker && npm run deploy
 ### Exportar los registros a Excel/Sheets
 
 ```
-https://cancuncerocancer.com/api/admin/exportar.csv
+https://cancuncerocancer-api.carloskantun.workers.dev/api/admin/exportar.csv
 ```
-con el encabezado `Authorization: Bearer TU_ADMIN_TOKEN` (usar una extensión
+Usar directamente el Worker: los clientes pueden retirar `Authorization` al
+seguir una redirección entre dominios. Consultar con el encabezado
+`Authorization: Bearer TU_ADMIN_TOKEN` (usar una extensión
 de navegador tipo "ModHeader", Postman, o `curl -O -H "authorization: Bearer ..." URL`).
 
 ---
@@ -179,8 +185,10 @@ y revierte ese cambio antes de subir a producción (no debe quedar en el commit)
 
 ## Alternativa sin Cloudflare Workers
 
-Si por alguna razón el dominio no puede pasar por Cloudflare, la alternativa
-es un backend PHP + MySQL/SQLite en el mismo VPS, replicando las mismas tres
+No es necesaria en el despliegue actual: el Worker funciona mediante
+`workers.dev` sin cambiar el DNS del dominio. Si se decide prescindir de
+Workers por completo, una alternativa sería un backend PHP + MySQL/SQLite
+en el mismo VPS, replicando las mismas tres
 rutas (`/api/registro`, `/api/acceso`, `/api/biblioteca`) con la misma forma
 de entrada y salida que usa `worker/src/`. Avisar a Carlos antes de tomar ese
 camino: implica escribir ese backend PHP y ajustar `apiBase` en `config.js`.
