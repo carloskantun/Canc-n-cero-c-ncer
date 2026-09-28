@@ -36,7 +36,7 @@ Instalar dependencias mediante `npm ci` en `worker/`. Usar Wrangler 4 y `wrangle
 
 No volver a crear la base ni cambiar sus tablas sin revisar y respaldar datos. No cambiar `TOKEN_SECRETO` sin planificar la invalidación de los enlaces emitidos.
 
-Resend: `RESEND_API_KEY` configurada como secreto en Cloudflare. Dominio de envío `cancuncerocancer.com` creado; registros dedicados `resend._domainkey` (TXT), `send` (TXT/MX) y `rsend` (CNAME) publicados en el DNS del VPS. El MX y SPF de Google existentes se conservan. Dominio confirmado como `verified` por la API de Resend. La prueba autorizada a `hola@cancuncerocancer.com` fue aceptada por Resend, pero su estado final fue `bounced` (ID `01a0e8e3-3c51-74ab-94a2-caec1922853a`); el motivo específico aún no se ha comprobado. Falta completar una prueba de entrega a un buzón operativo; hasta completarla, `CORREO_HABILITADO` del Worker y `correoHabilitado` del frontend permanecen en `false`. Así, guardar la clave no promete envíos antes de verificar el dominio. Tras la prueba, cambiar ambos a `true` y desplegar Worker y web.
+Resend: `RESEND_API_KEY` configurada como secreto en Cloudflare. Dominio de envío `cancuncerocancer.com` creado; registros dedicados `resend._domainkey` (TXT), `send` (TXT/MX) y `rsend` (CNAME) publicados en el DNS del VPS. Los registros de Resend son independientes del MX principal. El 28-sep, por indicación del responsable, el MX principal se cambió de `smtp.google.com` a `mail.cancuncerocancer.com` (prioridad 10, TTL 300, IP 129.121.35.15). cPanel ya estaba en modo local y el buzón `hola@` existe y está habilitado. El SPF raíz conserva su configuración anterior; no se validó aquí el envío saliente desde cPanel. Dominio confirmado como `verified` por la API de Resend. La prueba autorizada a `hola@cancuncerocancer.com` fue aceptada por Resend, pero su estado final fue `bounced` (ID `01a0e8e3-3c51-74ab-94a2-caec1922853a`); el motivo específico aún no se ha comprobado. Falta completar una prueba de entrega a un buzón operativo; hasta completarla, `CORREO_HABILITADO` del Worker y `correoHabilitado` del frontend permanecen en `false`. Así, guardar la clave no promete envíos antes de verificar el dominio. Tras la prueba, cambiar ambos a `true` y desplegar Worker y web.
 
 El registro duplicado ya no modifica los datos de otra persona ni entrega su token. Los correos escapan nombres, no registran direcciones en el mensaje de proveedor ausente y solo se anotan como enviados cuando el proveedor confirma. Las respuestas JSON privadas no se cachean.
 
@@ -84,3 +84,11 @@ Disponible en `/admin/`, con búsqueda, filtro de origen y exportación CSV.
 Usa la API existente `/api/leads` y las claves `ADMIN_KEY` o `ADMIN_TOKEN`,
 sin duplicar registros ni modificar D1. Clave y contactos solo en memoria;
 no carga analítica. Consulta real y exportación autenticada comprobadas.
+
+### Corrección de recepción en cPanel
+
+El MX principal ya apunta al VPS y se comprobó mediante DNS autoritativo por
+TCP y el resolvedor público de Google. El cambio no afecta al MX `send` de
+Resend. El MX anterior tenía TTL de 14400 segundos: algunas cachés pueden
+conservar Google hasta cuatro horas. Respaldo DNS previo fuera del repositorio.
+La prueba anterior de Resend rebotó antes del cambio; falta repetir la entrega.
