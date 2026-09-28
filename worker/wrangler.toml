@@ -1,0 +1,38 @@
+name = "cancuncerocancer-api"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+# --- Base de datos D1 -----------------------------------------------------
+# 1. Crear una vez:  wrangler d1 create ccc_db
+# 2. Copiar el "database_id" que devuelve aquí abajo.
+[[d1_databases]]
+binding = "DB"
+database_name = "ccc_db"
+database_id = "REEMPLAZA_CON_TU_DATABASE_ID"
+
+# --- Ruta del sitio --------------------------------------------------------
+# Si el dominio cancuncerocancer.com pasa por Cloudflare (naranja), esta ruta
+# hace que /api/* del dominio llegue a este Worker sin tocar el resto del sitio,
+# que sigue sirviéndose desde el VPS/hosting normal.
+# Ajustar "zone_name" si es distinto, y crear la ruta también desde el
+# dashboard de Cloudflare -> el dominio -> Workers Routes si el despliegue
+# no la crea sola.
+[[routes]]
+pattern = "cancuncerocancer.com/api/*"
+zone_name = "cancuncerocancer.com"
+
+# --- Variables normales (no secretas) -------------------------------------
+[vars]
+# Dominio público del sitio, usado para armar enlaces del correo de acceso.
+SITE_URL = "https://cancuncerocancer.com"
+# Nombre del "taller" actual; permite tener varias generaciones en la misma tabla.
+TALLER_ACTUAL = "taller-1"
+# Correo remitente para los envíos (debe estar verificado en el proveedor de correo).
+CORREO_REMITENTE = "Cancún Cero Cáncer <hola@cancuncerocancer.com>"
+
+# --- Secretos (NO van en este archivo; se configuran con wrangler) --------
+# wrangler secret put TOKEN_SECRETO        -> cadena larga y aleatoria, firma los tokens de acceso
+# wrangler secret put ADMIN_TOKEN          -> contraseña para ver/exportar los registros
+# wrangler secret put RESEND_API_KEY       -> (opcional) para enviar correos con Resend
+# wrangler secret put META_PIXEL_ID        -> (opcional) para la API de Conversiones
+# wrangler secret put META_ACCESS_TOKEN    -> (opcional) para la API de Conversiones

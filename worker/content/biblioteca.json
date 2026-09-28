@@ -1,0 +1,35 @@
+{
+  "_ayuda": "Contenido PRIVADO de la biblioteca (solo se ve con token). Vive en el Worker, no en /public, porque no debe ser público. 'activa' controla si la semana ya se ve. 'youtubeId' es la parte final de la URL de YouTube: https://www.youtube.com/watch?v=ESTO_ES_EL_ID",
+
+  "categorias": [
+    { "id": "ligas", "nombre": "Ligas" },
+    { "id": "botellas", "nombre": "Botellas" },
+    { "id": "peso-corporal", "nombre": "Peso corporal" },
+    { "id": "movilidad", "nombre": "Movilidad" },
+    { "id": "cardio", "nombre": "Cardio suave" }
+  ],
+
+  "semanas": [
+    { "numero": 1, "titulo": "Movilidad y postura", "activa": true, "disponibleDesde": "" },
+    { "numero": 2, "titulo": "Fuerza con ligas", "activa": false, "disponibleDesde": "Por confirmar" },
+    { "numero": 3, "titulo": "Fuerza con botellas de agua", "activa": false, "disponibleDesde": "Por confirmar" },
+    { "numero": 4, "titulo": "Cardio suave y alimentación", "activa": false, "disponibleDesde": "Por confirmar" },
+    { "numero": 5, "titulo": "Prevención y plan para seguir", "activa": false, "disponibleDesde": "Por confirmar" }
+  ],
+
+  "videos": [
+    { "semana": 1, "categoria": "movilidad", "titulo": "Movilidad de cadera y espalda", "descripcion": "Rutina de 8 minutos para empezar el día.", "youtubeId": "", "duracion": "8 min", "nivel": "Básico" },
+    { "semana": 1, "categoria": "peso-corporal", "titulo": "Postura y activación básica", "descripcion": "", "youtubeId": "", "duracion": "6 min", "nivel": "Básico" },
+    { "semana": 2, "categoria": "ligas", "titulo": "Remo de pie con liga", "descripcion": "", "youtubeId": "", "duracion": "5 min", "nivel": "Básico" },
+    { "semana": 2, "categoria": "ligas", "titulo": "Apertura de pecho con liga", "descripcion": "", "youtubeId": "", "duracion": "5 min", "nivel": "Básico" },
+    { "semana": 3, "categoria": "botellas", "titulo": "Curl y press con botellas de agua", "descripcion": "", "youtubeId": "", "duracion": "6 min", "nivel": "Básico" },
+    { "semana": 4, "categoria": "cardio", "titulo": "Cardio suave de 10 minutos", "descripcion": "", "youtubeId": "", "duracion": "10 min", "nivel": "Básico" },
+    { "semana": 5, "categoria": "movilidad", "titulo": "Rutina de cierre y estiramiento", "descripcion": "", "youtubeId": "", "duracion": "8 min", "nivel": "Básico" }
+  ],
+
+  "guias": [
+    { "semana": 1, "titulo": "Cómo empezar sin lesionarte", "resumen": "Postura, respiración y calentamiento antes de cualquier rutina.", "puntos": ["Calienta 5 minutos antes de empezar", "Respira sin aguantar el aire durante el esfuerzo", "Detente si sientes dolor agudo (no confundir con cansancio)"], "pdf": "" },
+    { "semana": 4, "titulo": "Tu plato saludable, guía completa", "resumen": "Cómo armar tus comidas del día con ingredientes de Cancún.", "puntos": ["Mitad del plato: verduras de temporada", "Un cuarto: proteína (pescado, pollo, huevo, frijol)", "Un cuarto: cereal integral (arroz integral, tortilla de maíz)"], "pdf": "" },
+    { "semana": 5, "titulo": "Revisiones que no debes dejar pasar", "resumen": "Cuándo y cómo hablar con tu médico sobre tus revisiones preventivas.", "puntos": ["Anota tus antecedentes familiares", "Agenda tu revisión anual aunque te sientas bien", "Lleva tus dudas por escrito a la consulta"], "pdf": "" }
+  ]
+}

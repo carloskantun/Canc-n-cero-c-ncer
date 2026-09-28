@@ -1,0 +1,184 @@
+{
+  "_ayuda": "Este archivo controla TODOS los textos, datos del taller e imágenes del sitio público. Edita los valores entre comillas; no cambies los nombres de los campos. Lo que diga 'Por confirmar' se mostrará tal cual hasta que lo cambies.",
+
+  "marca": {
+    "nombre": "Cancún Cero Cáncer",
+    "lema": "Muévete hoy, cuídate siempre",
+    "descripcion": "Movimiento para que las mujeres de Cancún reduzcan su riesgo de cáncer con actividad física, buena alimentación y prevención."
+  },
+
+  "contacto": {
+    "whatsapp": "",
+    "mensajeWhatsapp": "Hola, quiero información del taller de Cancún Cero Cáncer.",
+    "correo": "hola@cancuncerocancer.com",
+    "redes": {
+      "facebook": "",
+      "instagram": "",
+      "tiktok": "",
+      "youtube": ""
+    }
+  },
+
+  "menu": [
+    { "texto": "Taller", "enlace": "/#taller" },
+    { "texto": "Ejercicios", "enlace": "/#ejercicios" },
+    { "texto": "Nutrición", "enlace": "/#nutricion" },
+    { "texto": "Biblioteca", "enlace": "/biblioteca/" }
+  ],
+
+  "hero": {
+    "imagen": "hero-principal",
+    "titulo": "Muévete hoy, cuídate siempre.",
+    "subtitulo": "Cancún Cero Cáncer es un movimiento para que las mujeres de Cancún reduzcan su riesgo de cáncer con actividad física, buena alimentación y prevención.",
+    "botonPrincipal": "Quiero registrarme",
+    "botonSecundario": "Ver ejercicios"
+  },
+
+  "pilares": {
+    "antetitulo": "Nuestra misión",
+    "titulo": "Tres hábitos que suman",
+    "texto": "No necesitas gimnasio ni dietas imposibles. Necesitas información clara y una comunidad que te acompañe.",
+    "items": [
+      {
+        "icono": "movimiento",
+        "color": "turquesa",
+        "imagen": "pilar-movimiento",
+        "titulo": "Movimiento",
+        "texto": "Ejercicios sencillos con ligas, botellas de agua y tu propio peso. Sin gimnasio."
+      },
+      {
+        "icono": "nutricion",
+        "color": "verde",
+        "imagen": "pilar-nutricion",
+        "titulo": "Nutrición",
+        "texto": "Ideas prácticas para comer mejor con lo que encuentras en Cancún."
+      },
+      {
+        "icono": "prevencion",
+        "color": "coral",
+        "imagen": "pilar-prevencion",
+        "titulo": "Prevención",
+        "texto": "Información clara sobre revisiones y señales de alerta, para que actúes a tiempo."
+      }
+    ]
+  },
+
+  "dato": {
+    "visible": true,
+    "texto": "La actividad física regular se asocia con menor riesgo de varios tipos de cáncer, entre ellos el de mama y el de colon.",
+    "fuente": "Fuente: Organización Mundial de la Salud (OMS). Pendiente de validación médica."
+  },
+
+  "taller": {
+    "antetitulo": "Taller",
+    "titulo": "5 semanas para crear el hábito",
+    "texto": "Sesiones guiadas donde aprendes a moverte con lo que tienes en casa, a comer mejor y a cuidar tu salud. Cada semana desbloqueas nuevos videos en la biblioteca para repasar cuando quieras.",
+    "imagen": "taller-grupo",
+    "datos": {
+      "fechas": "Por confirmar",
+      "horario": "Por confirmar",
+      "lugar": "Cancún, Q. Roo",
+      "formato": "Presencial",
+      "cupo": "Limitado",
+      "costo": "Por confirmar"
+    },
+    "respaldo": "Programa diseñado con asesoría médica.",
+    "semanas": [
+      { "titulo": "Movilidad y postura", "texto": "Despierta el cuerpo y aprende a moverte sin dolor." },
+      { "titulo": "Fuerza con ligas", "texto": "Ejercicios de todo el cuerpo con una liga de resistencia." },
+      { "titulo": "Fuerza con botellas de agua", "texto": "Tu botella de agua se convierte en tu pesa." },
+      { "titulo": "Cardio suave y alimentación", "texto": "Mueve el corazón y arma tu plato saludable." },
+      { "titulo": "Prevención y plan para seguir", "texto": "Revisiones, señales de alerta y tu rutina para casa." }
+    ],
+    "boton": "Aparta tu lugar"
+  },
+
+  "ejercicios": {
+    "antetitulo": "Ejercicios en casa",
+    "titulo": "Entrena en casa con lo que ya tienes",
+    "texto": "Una liga, dos botellas de agua y tu propio cuerpo. Aquí tienes una muestra; el resto está en la biblioteca.",
+    "categorias": [
+      { "id": "ligas", "nombre": "Ligas", "detalle": "Fuerza de todo el cuerpo", "imagen": "categoria-ligas" },
+      { "id": "botellas", "nombre": "Botellas", "detalle": "Tu botella es tu pesa", "imagen": "categoria-botellas" },
+      { "id": "peso-corporal", "nombre": "Peso corporal", "detalle": "Sin material", "imagen": "categoria-peso-corporal" },
+      { "id": "movilidad", "nombre": "Movilidad", "detalle": "Estira y respira", "imagen": "categoria-movilidad" },
+      { "id": "cardio", "nombre": "Cardio suave", "detalle": "Mueve el corazón", "imagen": "categoria-cardio" }
+    ],
+    "muestra": [
+      { "titulo": "Remo de pie con liga", "categoria": "ligas", "youtubeId": "", "duracion": "5 min", "nivel": "Básico" },
+      { "titulo": "Curl y press con botellas de agua", "categoria": "botellas", "youtubeId": "", "duracion": "6 min", "nivel": "Básico" },
+      { "titulo": "Movilidad de cadera y espalda", "categoria": "movilidad", "youtubeId": "", "duracion": "8 min", "nivel": "Básico" }
+    ],
+    "candado": {
+      "titulo": "Hay más videos en la biblioteca",
+      "texto": "Regístrate y recibe acceso a todos los ejercicios del taller, organizados por semana.",
+      "boton": "Registrarme"
+    }
+  },
+
+  "nutricion": {
+    "antetitulo": "Nutrición y prevención",
+    "titulo": "Comer bien también es prevenir",
+    "texto": "Guías cortas y prácticas. Las versiones completas están en la biblioteca.",
+    "items": [
+      { "imagen": "nutricion-plato", "titulo": "Tu plato, en fácil", "texto": "Mitad verduras, un cuarto proteína y un cuarto cereal integral." },
+      { "imagen": "nutricion-hidratacion", "titulo": "Hidrátate con el calor de Cancún", "texto": "Ideas de agua natural y fresca, sin azúcar añadida." },
+      { "imagen": "nutricion-revisiones", "titulo": "Revisiones que no debes dejar pasar", "texto": "Cuándo y cómo hablar con tu médico sobre tus revisiones." }
+    ]
+  },
+
+  "faq": {
+    "titulo": "Preguntas frecuentes",
+    "items": [
+      { "pregunta": "¿Necesito experiencia?", "respuesta": "No. Todos los ejercicios tienen una versión fácil y avanzas a tu ritmo." },
+      { "pregunta": "¿Qué material necesito?", "respuesta": "Una liga de resistencia, dos botellas de agua (de 500 ml o 1 litro) y ropa cómoda." },
+      { "pregunta": "¿Tiene costo?", "respuesta": "Por confirmar." },
+      { "pregunta": "¿Si ya tuve cáncer o estoy en tratamiento puedo participar?", "respuesta": "Consulta primero con tu médico. El taller es de prevención y no sustituye ningún tratamiento." },
+      { "pregunta": "¿Cómo vuelvo a ver los videos?", "respuesta": "Entra a la biblioteca con el correo con el que te registraste y te enviaremos tu enlace de acceso." }
+    ]
+  },
+
+  "registro": {
+    "antetitulo": "Registro",
+    "titulo": "Aparta tu lugar",
+    "texto": "Déjanos tus datos y te contactamos con todos los detalles del taller.",
+    "imagen": "registro-lateral",
+    "boton": "Registrarme",
+    "micro": "Te enviaremos tu acceso a la biblioteca por correo.",
+    "consentimiento": "Acepto el aviso de privacidad y recibir información de Cancún Cero Cáncer por WhatsApp y correo."
+  },
+
+  "gracias": {
+    "titulo": "¡Listo, {nombre}!",
+    "texto": "Ya eres parte de Cancún Cero Cáncer. Confirma tu lugar por WhatsApp y guarda el acceso a tu biblioteca.",
+    "mensajeWhatsapp": "Hola, me registré al taller de Cancún Cero Cáncer. Soy {nombre}."
+  },
+
+  "pie": {
+    "leyenda": "Contenido informativo. No sustituye la consulta médica."
+  },
+
+  "imagenes": {
+    "_ayuda": "Cada imagen tiene un id. Si el archivo no existe todavía, el sitio muestra un espacio de color con el nombre de la imagen. Para poner la foto, sube el archivo a /assets/img/ con ese nombre.",
+    "mostrarEtiquetas": true,
+    "hero-principal": {
+      "src": "/assets/img/hero-principal-desktop.webp",
+      "srcMobile": "/assets/img/hero-principal-mobile.webp",
+      "alt": "Tres mujeres de distintas edades entrenando con ligas en un parque de Cancún"
+    },
+    "pilar-movimiento": { "src": "/assets/img/pilar-movimiento.webp", "alt": "Mujer haciendo ejercicio con botellas de agua en su sala" },
+    "pilar-nutricion": { "src": "/assets/img/pilar-nutricion.webp", "alt": "Plato saludable con ingredientes locales" },
+    "pilar-prevencion": { "src": "/assets/img/pilar-prevencion.webp", "alt": "Dos mujeres caminando y conversando junto al mar al amanecer" },
+    "taller-grupo": { "src": "/assets/img/taller-grupo.webp", "alt": "Grupo de mujeres en una clase del taller bajo una palapa" },
+    "categoria-ligas": { "src": "/assets/img/categoria-ligas.webp", "alt": "Mujer haciendo ejercicio con liga de resistencia" },
+    "categoria-botellas": { "src": "/assets/img/categoria-botellas.webp", "alt": "Mujer haciendo press de hombro con botellas de agua" },
+    "categoria-peso-corporal": { "src": "/assets/img/categoria-peso-corporal.webp", "alt": "Mujer haciendo sentadilla con su propio peso" },
+    "categoria-movilidad": { "src": "/assets/img/categoria-movilidad.webp", "alt": "Mujer estirando en una terraza por la mañana" },
+    "categoria-cardio": { "src": "/assets/img/categoria-cardio.webp", "alt": "Mujer corriendo junto a la laguna al amanecer" },
+    "nutricion-plato": { "src": "/assets/img/nutricion-plato.webp", "alt": "Plato con mitad de verduras, un cuarto de proteína y un cuarto de cereal integral" },
+    "nutricion-hidratacion": { "src": "/assets/img/nutricion-hidratacion.webp", "alt": "Jarras de agua natural con pepino, limón y piña" },
+    "nutricion-revisiones": { "src": "/assets/img/nutricion-revisiones.webp", "alt": "Mujer anotando un recordatorio en su agenda" },
+    "registro-lateral": { "src": "/assets/img/registro-lateral.webp", "alt": "Mujer descansando después de entrenar" },
+    "biblioteca-hero": { "src": "/assets/img/biblioteca-hero.webp", "alt": "Material de ejercicio en casa: ligas, botellas de agua y tapete" }
+  }
+}

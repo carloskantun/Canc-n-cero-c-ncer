@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /acceso/
+Disallow: /biblioteca/
+Disallow: /gracias/
+
+Sitemap: https://cancuncerocancer.com/sitemap.xml
