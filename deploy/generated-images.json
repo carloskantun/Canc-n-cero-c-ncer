@@ -1,0 +1,266 @@
+[
+  {
+    "name": "hero-principal-desktop-v1",
+    "selected": true,
+    "output": "public/assets/img/hero-principal-desktop.webp",
+    "width": 1920,
+    "height": 1080,
+    "source": "exec-476aa63c-66dc-4883-9463-7706e44707d8.png"
+  },
+  {
+    "name": "hero-principal-desktop-v2",
+    "selected": false,
+    "output": "public/assets/img/_variantes/hero-principal-desktop-v2.webp",
+    "width": 1920,
+    "height": 1080,
+    "source": "exec-527e6b6f-8813-4304-8c6b-631dfd10d5b9.png"
+  },
+  {
+    "name": "hero-principal-mobile-v1",
+    "selected": true,
+    "output": "public/assets/img/hero-principal-mobile.webp",
+    "width": 1080,
+    "height": 1350,
+    "source": "exec-a33eb01a-87fc-47a8-a0fe-76e0a10a51b2.png"
+  },
+  {
+    "name": "hero-principal-mobile-v2",
+    "selected": false,
+    "output": "public/assets/img/_variantes/hero-principal-mobile-v2.webp",
+    "width": 1080,
+    "height": 1350,
+    "source": "exec-6b8800d0-80c2-459b-b750-25062f8ca71a.png"
+  },
+  {
+    "name": "pilar-movimiento-v1",
+    "selected": true,
+    "output": "public/assets/img/pilar-movimiento.webp",
+    "width": 1080,
+    "height": 1080,
+    "source": "exec-28e5c4f8-6a9f-4b08-987c-0477b397ad7f.png"
+  },
+  {
+    "name": "pilar-movimiento-v2",
+    "selected": false,
+    "output": "public/assets/img/_variantes/pilar-movimiento-v2.webp",
+    "width": 1080,
+    "height": 1080,
+    "source": "exec-43055e6e-4e49-453e-87a9-2401e1b559fd.png"
+  },
+  {
+    "name": "pilar-nutricion-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/pilar-nutricion-v1.webp",
+    "width": 1080,
+    "height": 1080,
+    "source": "exec-7b20c38a-55c5-4afe-9575-01b8150b1f5e.png"
+  },
+  {
+    "name": "pilar-nutricion-v2",
+    "selected": true,
+    "output": "public/assets/img/pilar-nutricion.webp",
+    "width": 1080,
+    "height": 1080,
+    "source": "exec-948f97a9-3dce-4ca5-856c-3422fc3e5470.png"
+  },
+  {
+    "name": "pilar-prevencion-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/pilar-prevencion-v1.webp",
+    "width": 1080,
+    "height": 1080,
+    "source": "exec-c70a5526-2fb5-4dce-a04e-18c66e0c1444.png"
+  },
+  {
+    "name": "pilar-prevencion-v2",
+    "selected": true,
+    "output": "public/assets/img/pilar-prevencion.webp",
+    "width": 1080,
+    "height": 1080,
+    "source": "exec-70947def-19de-44a2-bfab-fc3a320adffa.png"
+  },
+  {
+    "name": "taller-grupo-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/taller-grupo-v1.webp",
+    "width": 1600,
+    "height": 1067,
+    "source": "exec-7b8507da-caed-4969-b0b7-c884ac20f778.png"
+  },
+  {
+    "name": "taller-grupo-v2",
+    "selected": true,
+    "output": "public/assets/img/taller-grupo.webp",
+    "width": 1600,
+    "height": 1067,
+    "source": "exec-c4764bf3-0866-43d8-916a-a7b9c77bef2e.png"
+  },
+  {
+    "name": "categoria-ligas-v1",
+    "selected": true,
+    "output": "public/assets/img/categoria-ligas.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-0329c4a4-f0a6-4eaf-ab6e-51e955109a59.png"
+  },
+  {
+    "name": "categoria-ligas-v2",
+    "selected": false,
+    "output": "public/assets/img/_variantes/categoria-ligas-v2.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-ca32ba53-c081-445d-aa39-0a7b57022a99.png"
+  },
+  {
+    "name": "categoria-botellas-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/categoria-botellas-v1.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-3f3d8634-f40a-4933-adda-7afc4d348f1a.png"
+  },
+  {
+    "name": "categoria-botellas-v2",
+    "selected": true,
+    "output": "public/assets/img/categoria-botellas.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-236ae3ef-da7a-44ee-8cc9-df940a9e9a1f.png"
+  },
+  {
+    "name": "categoria-peso-corporal-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/categoria-peso-corporal-v1.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-f0a2aa29-5d3d-4962-8050-05850084dcc6.png"
+  },
+  {
+    "name": "categoria-peso-corporal-v2",
+    "selected": true,
+    "output": "public/assets/img/categoria-peso-corporal.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-3d71d65f-caf2-45ae-bbd9-14b6a74f31f3.png"
+  },
+  {
+    "name": "categoria-movilidad-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/categoria-movilidad-v1.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-c3723c90-06f8-467a-aaf0-89e4c88c5411.png"
+  },
+  {
+    "name": "categoria-movilidad-v2",
+    "selected": true,
+    "output": "public/assets/img/categoria-movilidad.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-43492023-a76e-4a47-8f0e-6b987977a273.png"
+  },
+  {
+    "name": "categoria-cardio-v1",
+    "selected": true,
+    "output": "public/assets/img/categoria-cardio.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-258e6ce1-ed65-4b77-ba07-66f69dd9e538.png"
+  },
+  {
+    "name": "categoria-cardio-v2",
+    "selected": false,
+    "output": "public/assets/img/_variantes/categoria-cardio-v2.webp",
+    "width": 1280,
+    "height": 720,
+    "source": "exec-97329546-219a-4235-85ad-4ac895296bb7.png"
+  },
+  {
+    "name": "nutricion-plato-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/nutricion-plato-v1.webp",
+    "width": 1200,
+    "height": 900,
+    "source": "exec-cf066f85-3792-4328-b268-bbb4180726bb.png"
+  },
+  {
+    "name": "nutricion-plato-v2",
+    "selected": true,
+    "output": "public/assets/img/nutricion-plato.webp",
+    "width": 1200,
+    "height": 900,
+    "source": "exec-e72aac52-7e50-46c8-80a1-cf2820b71f37.png"
+  },
+  {
+    "name": "nutricion-hidratacion-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/nutricion-hidratacion-v1.webp",
+    "width": 1200,
+    "height": 900,
+    "source": "exec-d35b1495-e4c9-4f19-b2e0-c7e662753d11.png"
+  },
+  {
+    "name": "nutricion-hidratacion-v2",
+    "selected": false,
+    "output": "public/assets/img/_variantes/nutricion-hidratacion-v2.webp",
+    "width": 1200,
+    "height": 900,
+    "source": "exec-0b50eaff-a4b8-426c-96b6-b11f060f9012.png"
+  },
+  {
+    "name": "nutricion-revisiones-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/nutricion-revisiones-v1.webp",
+    "width": 1200,
+    "height": 900,
+    "source": "exec-369d8d5f-1d10-435d-9ff8-ea504af0b9ea.png"
+  },
+  {
+    "name": "nutricion-revisiones-v2",
+    "selected": true,
+    "output": "public/assets/img/nutricion-revisiones.webp",
+    "width": 1200,
+    "height": 900,
+    "source": "exec-9349813e-4eba-45d3-a2f2-4c0951bbac81.png"
+  },
+  {
+    "name": "registro-lateral-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/registro-lateral-v1.webp",
+    "width": 1080,
+    "height": 1350,
+    "source": "exec-73e98d94-4eb4-4f6a-87d4-fd3416d5cf68.png"
+  },
+  {
+    "name": "registro-lateral-v2",
+    "selected": true,
+    "output": "public/assets/img/registro-lateral.webp",
+    "width": 1080,
+    "height": 1350,
+    "source": "exec-d93f3666-383b-4698-bd0e-a6f3a3f5f026.png"
+  },
+  {
+    "name": "biblioteca-hero-v1",
+    "selected": false,
+    "output": "public/assets/img/_variantes/biblioteca-hero-v1.webp",
+    "width": 1920,
+    "height": 640,
+    "source": "exec-cb9ef96c-45da-4061-8ac6-39c46c18580a.png"
+  },
+  {
+    "name": "biblioteca-hero-v2",
+    "selected": true,
+    "output": "public/assets/img/biblioteca-hero.webp",
+    "width": 1920,
+    "height": 640,
+    "source": "exec-23b0cab0-7813-4b3e-b8b9-671d2929e00c.png"
+  },
+  {
+    "name": "nutricion-hidratacion-v3",
+    "selected": true,
+    "output": "public/assets/img/nutricion-hidratacion.webp",
+    "width": 1200,
+    "height": 900,
+    "source": "exec-c8ca6f28-5e5a-4ed9-b7a7-bcfa04a0ff01.png"
+  }
+]

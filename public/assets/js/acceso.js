@@ -21,7 +21,7 @@
       '<div class="caja__icono" style="background:var(--turquesa-claro);color:var(--turquesa)">' + C.icono("correo") + "</div>" +
       '<h1 style="font-size:clamp(1.8rem,6vw,2.4rem)">Entra a tu biblioteca</h1>' +
       '<p class="lead">Escribe el correo con el que te registraste y te enviamos tu enlace de acceso. Sin contraseñas.</p>' +
-      yaTiene + aviso +
+      yaTiene + aviso + (window.CCC_CONFIG.correoHabilitado === false ? '<div class="aviso-form aviso-form--error visible">El envío de enlaces por correo no está disponible por ahora. Usa el dispositivo donde te registraste para acceder.</div>' : "") +
       '<form id="form-acceso" novalidate>' +
       '<div class="aviso-form" id="acceso-msg" role="status"></div>' +
       '<div class="campo"><label for="a-email">Correo electrónico</label>' +

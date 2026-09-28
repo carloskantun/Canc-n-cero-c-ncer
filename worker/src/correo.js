@@ -4,7 +4,7 @@
 
 export async function enviarCorreo(env, { para, asunto, html }) {
   if (!env.RESEND_API_KEY) {
-    console.log("[correo] RESEND_API_KEY no configurado; no se envía:", { para, asunto });
+    console.log("[correo] Proveedor no configurado; no se envía.");
     return { enviado: false, motivo: "sin_configurar" };
   }
   const resp = await fetch("https://api.resend.com/emails", {
@@ -21,7 +21,7 @@ export async function enviarCorreo(env, { para, asunto, html }) {
     })
   });
   if (!resp.ok) {
-    console.error("[correo] Resend respondió con error:", resp.status, await resp.text().catch(() => ""));
+    console.error("[correo] Resend respondió con error:", resp.status);
     return { enviado: false, motivo: "error_proveedor" };
   }
   return { enviado: true };
@@ -44,7 +44,7 @@ function envoltorio(tituloVisible, cuerpoHtml, siteUrl) {
 }
 
 export function correoBienvenida({ nombre, enlaceBiblioteca, siteUrl }) {
-  const primerNombre = String(nombre || "").trim().split(/\s+/)[0] || "";
+  const primerNombre = escaparHtml(String(nombre || "").trim().split(/\s+/)[0] || "");
   return envoltorio(
     "Bienvenida",
     `<h1 style="font-size:22px;margin:0 0 12px;">¡Hola${primerNombre ? ", " + primerNombre : ""}!</h1>
@@ -59,7 +59,7 @@ export function correoBienvenida({ nombre, enlaceBiblioteca, siteUrl }) {
 }
 
 export function correoAcceso({ nombre, enlaceBiblioteca, siteUrl }) {
-  const primerNombre = String(nombre || "").trim().split(/\s+/)[0] || "";
+  const primerNombre = escaparHtml(String(nombre || "").trim().split(/\s+/)[0] || "");
   return envoltorio(
     "Tu acceso",
     `<h1 style="font-size:22px;margin:0 0 12px;">Aquí está tu acceso${primerNombre ? ", " + primerNombre : ""}</h1>
@@ -70,4 +70,8 @@ export function correoAcceso({ nombre, enlaceBiblioteca, siteUrl }) {
      <p style="font-size:13px;color:#5b6b70;">Si el botón no funciona, copia y pega este enlace en tu navegador:<br>${enlaceBiblioteca}</p>`,
     siteUrl
   );
+}
+
+function escaparHtml(valor) {
+  return String(valor).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }

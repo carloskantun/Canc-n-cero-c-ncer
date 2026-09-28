@@ -1,3 +1,9 @@
+> **Producción desde 28-sep-2026:** consultar `deploy/OPERACION.md` antes de desplegar.
+> El sitio vive en `/home/cancuncerocancer/public_html` (VPS-KANTUN), la API en
+> `https://cancuncerocancer-api.carloskantun.workers.dev/api` y D1 ya está creada.
+> El DNS sigue en el VPS. No repetir la creación de D1 ni restaurar WordPress.
+> Excluir siempre `assets/img/_variantes/` y `README.md` al publicar `public/`.
+
 # Despliegue — Cancún Cero Cáncer
 
 Dos piezas independientes:

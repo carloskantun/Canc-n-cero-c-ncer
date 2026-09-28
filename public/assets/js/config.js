@@ -5,7 +5,8 @@
    - metaPixelId: ID del Pixel de Meta. Vacío = no se carga el Pixel.
 */
 window.CCC_CONFIG = {
-  apiBase: "/api",
+  apiBase: "https://cancuncerocancer-api.carloskantun.workers.dev/api",
   metaPixelId: "",
+  correoHabilitado: false,
   contenido: "/content/sitio.json"
 };

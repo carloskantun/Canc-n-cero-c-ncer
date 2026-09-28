@@ -1,3 +1,4 @@
+import { postAcceso } from "./acceso.js";
 import { json, texto, esEmailValido, normalizarWhatsApp, crearToken, idAleatorio, limitarPorIp } from "../util.js";
 import { enviarCorreo, correoBienvenida } from "../correo.js";
 import { enviarEventoLead } from "../meta.js";
@@ -30,17 +31,12 @@ export async function postRegistro(request, env, ctx) {
 
   let idRegistro, token;
   if (yaExiste) {
-    // Ya se había registrado (por ejemplo, para otro taller): actualiza datos y conserva su acceso.
-    idRegistro = yaExiste.id;
-    token = yaExiste.token;
-    await env.DB.prepare(
-      `UPDATE registros SET nombre = ?, whatsapp = ?, edad = ?, consentimiento = 1,
-       utm_source = COALESCE(NULLIF(?, ''), utm_source), utm_medium = COALESCE(NULLIF(?, ''), utm_medium),
-       utm_campaign = COALESCE(NULLIF(?, ''), utm_campaign), utm_content = COALESCE(NULLIF(?, ''), utm_content),
-       utm_term = COALESCE(NULLIF(?, ''), utm_term), fbclid = COALESCE(NULLIF(?, ''), fbclid)
-       WHERE id = ?`
-    ).bind(nombre, whatsapp, edad, cuerpo.utm_source || "", cuerpo.utm_medium || "", cuerpo.utm_campaign || "",
-      cuerpo.utm_content || "", cuerpo.utm_term || "", cuerpo.fbclid || "", idRegistro).run();
+    // Un formulario público no acredita ser dueña de un correo existente.
+    // Enviar acceso al correo original sin modificar datos ni entregar su token.
+    const respuesta = await postAcceso(new Request(request.url, {
+      method: "POST", headers: request.headers, body: JSON.stringify({ email })
+    }), env, ctx);
+    return respuesta;
   } else {
     token = idAleatorio(24);
     const ip = request.headers.get("cf-connecting-ip") || "";
@@ -69,11 +65,11 @@ export async function postRegistro(request, env, ctx) {
     pagina: cuerpo.pagina, utm_source: cuerpo.utm_source, utm_campaign: cuerpo.utm_campaign };
   const tareas = Promise.all([
     enviarCorreo(env, { para: email, asunto: "Tu acceso a Cancún Cero Cáncer", html: correoBienvenida({ nombre, enlaceBiblioteca, siteUrl: env.SITE_URL }) })
-      .then(() => env.DB.prepare("INSERT INTO envios (registro_id, tipo) VALUES (?, 'bienvenida')").bind(idRegistro).run())
+      .then((resultado) => resultado.enviado ? env.DB.prepare("INSERT INTO envios (registro_id, tipo) VALUES (?, 'bienvenida')").bind(idRegistro).run() : undefined)
       .catch((e) => console.error("[registro] error de correo:", e)),
     enviarEventoLead(env, registroParaMeta, request).catch((e) => console.error("[registro] error de CAPI:", e))
   ]);
   if (ctx?.waitUntil) ctx.waitUntil(tareas); else await tareas;
 
-  return json({ ok: true, token: tokenAcceso });
+  return json({ ok: true, token: tokenAcceso, correoHabilitado: !!env.RESEND_API_KEY });
 }

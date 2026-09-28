@@ -1,6 +1,7 @@
 name = "cancuncerocancer-api"
 main = "src/index.js"
 compatibility_date = "2026-09-01"
+workers_dev = true
 
 # --- Base de datos D1 -----------------------------------------------------
 # 1. Crear una vez:  wrangler d1 create ccc_db
@@ -8,18 +9,12 @@ compatibility_date = "2026-09-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "ccc_db"
-database_id = "REEMPLAZA_CON_TU_DATABASE_ID"
+database_id = "d18212bd-ef0f-4a44-b0cc-70d14d81f3d7"
 
-# --- Ruta del sitio --------------------------------------------------------
-# Si el dominio cancuncerocancer.com pasa por Cloudflare (naranja), esta ruta
-# hace que /api/* del dominio llegue a este Worker sin tocar el resto del sitio,
-# que sigue sirviéndose desde el VPS/hosting normal.
-# Ajustar "zone_name" si es distinto, y crear la ruta también desde el
-# dashboard de Cloudflare -> el dominio -> Workers Routes si el despliegue
-# no la crea sola.
-[[routes]]
-pattern = "cancuncerocancer.com/api/*"
-zone_name = "cancuncerocancer.com"
+# --- API independiente ----------------------------------------------------
+# El dominio mantiene su DNS y la web estática en el VPS.
+# public/assets/js/config.js usa la URL HTTPS de este Worker.
+# No agregar una ruta de zona hasta que el dominio use Cloudflare.
 
 # --- Variables normales (no secretas) -------------------------------------
 [vars]

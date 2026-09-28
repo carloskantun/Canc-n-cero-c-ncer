@@ -121,7 +121,7 @@
       e(r.consentimiento).replace("aviso de privacidad", '<a href="/aviso-de-privacidad/" target="_blank">aviso de privacidad</a>') +
       "</span></label>" +
       '<button class="btn btn--coral btn--bloque" type="submit">' + e(r.boton) + "</button>" +
-      '<p class="micro">' + e(r.micro) + "</p>" +
+      '<p class="micro">' + e(window.CCC_CONFIG.correoHabilitado === false ? "Tu acceso a la biblioteca quedará guardado en este dispositivo." : r.micro) + "</p>" +
       "</form></div></div></div></section>";
 
     C.$("#contenido").innerHTML = html;
@@ -243,7 +243,7 @@
       }).then(function (res) {
         if (!res.ok || !res.j.ok) throw new Error(res.j.mensaje || "No pudimos completar tu registro.");
         if (res.j.token) C.guardar("localStorage", "ccc_acceso", { token: res.j.token, nombre: datos.nombre });
-        C.guardar("sessionStorage", "ccc_lead", { nombre: datos.nombre, eventId: eventId, pendienteEvento: true });
+        C.guardar("sessionStorage", "ccc_lead", { nombre: datos.nombre, eventId: eventId, pendienteEvento: true, correoHabilitado: !!res.j.correoHabilitado });
         location.href = "/gracias/";
       }).catch(function (err) {
         mostrarError(err.message && err.message.indexOf("Failed") === -1 ? err.message : "No pudimos completar tu registro en este momento.");
