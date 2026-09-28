@@ -248,3 +248,12 @@ También se admite `?key=ADMIN_KEY` como se solicitó, pero esa clave puede
 quedar en historial y registros del servidor: no publicar ni compartir ese
 enlace. La clave es un secreto separado, configurado con
 `wrangler secret put ADMIN_KEY`. Respuestas de exportación: `no-store`.
+
+### Panel de contactos
+
+`https://cancuncerocancer.com/admin/` permite consultar, buscar por nombre,
+correo o WhatsApp, filtrar por origen y descargar todos los contactos en CSV.
+Acepta `ADMIN_KEY` o `ADMIN_TOKEN`. La clave se envía en Authorization y solo
+permanece en memoria; cerrar sesión o recargar borra el acceso. El panel no
+carga Meta Pixel ni incluye los contactos en los archivos públicos.
+Los formularios continúan guardando automáticamente en D1.

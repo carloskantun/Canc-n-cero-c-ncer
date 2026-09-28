@@ -36,7 +36,7 @@ Instalar dependencias mediante `npm ci` en `worker/`. Usar Wrangler 4 y `wrangle
 
 No volver a crear la base ni cambiar sus tablas sin revisar y respaldar datos. No cambiar `TOKEN_SECRETO` sin planificar la invalidación de los enlaces emitidos.
 
-Pendiente: configurar Resend con remitente verificado. Introducir `RESEND_API_KEY` por entrada segura de Wrangler, comprobar un envío a un correo de prueba autorizado y luego poner `correoHabilitado: true` en `public/assets/js/config.js` y publicar la web. Actualmente los registros nuevos acceden desde el mismo dispositivo; la recuperación por correo devuelve 503 de forma explícita.
+Resend: `RESEND_API_KEY` configurada como secreto en Cloudflare. Dominio de envío `cancuncerocancer.com` creado; registros dedicados `resend._domainkey` (TXT), `send` (TXT/MX) y `rsend` (CNAME) publicados en el DNS del VPS. El MX y SPF de Google existentes se conservan. Pendiente de verificación del proveedor y prueba autorizada a `hola@cancuncerocancer.com`; hasta completarla, `correoHabilitado` del frontend permanece en `false`.
 
 El registro duplicado ya no modifica los datos de otra persona ni entrega su token. Los correos escapan nombres, no registran direcciones en el mensaje de proveedor ausente y solo se anotan como enviados cuando el proveedor confirma. Las respuestas JSON privadas no se cachean.
 
@@ -77,3 +77,10 @@ su deduplicación aún deben comprobarse en Events Manager.
 El encuadre de portada, Movimiento y Prevención se alinea arriba para conservar
 los rostros; Cardio se centra sobre la persona. Se mantiene `object-fit: cover`
 y las proporciones de las tarjetas. Revisado en escritorio y móvil de 390 px.
+
+## Panel de contactos — 28-sep-2026
+
+Disponible en `/admin/`, con búsqueda, filtro de origen y exportación CSV.
+Usa la API existente `/api/leads` y las claves `ADMIN_KEY` o `ADMIN_TOKEN`,
+sin duplicar registros ni modificar D1. Clave y contactos solo en memoria;
+no carga analítica. Consulta real y exportación autenticada comprobadas.
