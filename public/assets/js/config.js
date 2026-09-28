@@ -6,6 +6,6 @@
 */
 window.CCC_CONFIG = {
   apiBase: "https://cancuncerocancer-api.carloskantun.workers.dev/api",
-  correoHabilitado: false,
+  correoHabilitado: true,
   contenido: "/content/sitio.json"
 };

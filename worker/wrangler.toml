@@ -19,7 +19,7 @@ database_id = "d18212bd-ef0f-4a44-b0cc-70d14d81f3d7"
 # --- Variables normales (no secretas) -------------------------------------
 [vars]
 # Activar tras verificar el dominio y probar entrega en Resend.
-CORREO_HABILITADO = "false"
+CORREO_HABILITADO = "true"
 # Dominio público del sitio, usado para armar enlaces del correo de acceso.
 SITE_URL = "https://cancuncerocancer.com"
 # Nombre del "taller" actual; permite tener varias generaciones en la misma tabla.
