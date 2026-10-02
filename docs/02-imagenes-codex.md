@@ -1,5 +1,19 @@
 # Instrucciones para Codex — Imágenes de Cancún Cero Cáncer
 
+## Identidad visual exacta para nuevas piezas
+
+Verificada contra el CSS del sitio el 2-oct-2026. Principal turquesa
+`#0E9AA7`, secundario verde `#3DBE8B`, rosa coral `#EF6F8E`.
+Fondos blanco `#FFFFFF` y arena `#F7F1E8`; texto carbón `#1F2A2E`.
+Títulos y marca: **Montserrat 700/800**. Texto: **Nunito 400/600/700**.
+No se usa Poppins. Los hex se aplican exactamente al componer gráficos;
+las fotos de IA solo toman la paleta como referencia. Generar fotos sin letras
+y añadir tipografía y marca en un editor, respetando la regla de abajo.
+
+La guía completa de formatos, calendario, copys y campaña está en
+[05-guia-marca-contenidos-campana.md](05-guia-marca-contenidos-campana.md).
+El destino de registro es `https://cancuncerocancer.com/#registro`.
+
 ## Contexto
 Cancún Cero Cáncer es un movimiento para que las mujeres de Cancún reduzcan su riesgo de cáncer con actividad física en casa (ligas, botellas de agua, peso corporal), nutrición y prevención. El sitio (cancuncerocancer.com) es estático, móvil primero, con el contenido en `content.json`. La estructura completa está en `ccc-01-estructura-y-diseno.md`.
 
