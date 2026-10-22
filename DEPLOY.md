@@ -287,3 +287,9 @@ asiento único y ticket único mediante restricciones y triggers de SQLite.
 exporta reservas y cancelaciones. En `/admin/`, “Ver tickets” muestra cupos por
 sesión, asiento, contacto, estado y folio; “Descargar tickets CSV” exporta la lista.
 La reserva no genera un nuevo evento Lead de Meta.
+
+El encabezado ofrece “Ingresar” (sin contraseña, enlace al correo) o “Mi cuenta”
+si hay acceso guardado, también en móvil. `/biblioteca/` es el área de cuenta:
+taller disponible, reserva/ticket y materiales. Esta experiencia es gratuita.
+Los cursos de pago futuros requieren integrar cobro y validar pago en servidor;
+no hay pasarela ni cobros habilitados en esta versión.

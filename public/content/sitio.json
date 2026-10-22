@@ -84,7 +84,7 @@
       "lugar": "Hospital Galenia Cancún · Auditorio",
       "formato": "Presencial",
       "cupo": "25 asientos por sesión",
-      "costo": "Por confirmar"
+      "costo": "Gratuito"
     },
     "respaldo": "Programa diseñado con asesoría médica.",
     "semanas": [
@@ -136,7 +136,7 @@
     "items": [
       { "pregunta": "¿Necesito experiencia?", "respuesta": "No. Todos los ejercicios tienen una versión fácil y avanzas a tu ritmo." },
       { "pregunta": "¿Qué material necesito?", "respuesta": "Una liga de resistencia, dos botellas de agua (de 500 ml o 1 litro) y ropa cómoda." },
-      { "pregunta": "¿Tiene costo?", "respuesta": "Por confirmar." },
+      { "pregunta": "¿Tiene costo?", "respuesta": "Esta experiencia de noviembre es gratuita. Reserva tu fecha, horario y asiento; hay 25 lugares por sesión." },
       { "pregunta": "¿Si ya tuve cáncer o estoy en tratamiento puedo participar?", "respuesta": "Consulta primero con tu médico. El taller es de prevención y no sustituye ningún tratamiento." },
       { "pregunta": "¿Cómo vuelvo a ver los videos?", "respuesta": "Entra a la biblioteca con el correo con el que te registraste y te enviaremos tu enlace de acceso." }
     ]
