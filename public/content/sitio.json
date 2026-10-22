@@ -75,15 +75,15 @@
 
   "taller": {
     "antetitulo": "Taller",
-    "titulo": "5 semanas para crear el hábito",
-    "texto": "Sesiones guiadas donde aprendes a moverte con lo que tienes en casa, a comer mejor y a cuidar tu salud. Cada semana desbloqueas nuevos videos en la biblioteca para repasar cuando quieras.",
+    "titulo": "Elige tu experiencia en noviembre",
+    "texto": "Regístrate y elige una fecha, horario y asiento para tu experiencia en el Auditorio del Hospital Galenia Cancún. Conserva también tu acceso a la biblioteca.",
     "imagen": "taller-grupo",
     "datos": {
-      "fechas": "Por confirmar",
-      "horario": "Por confirmar",
-      "lugar": "Cancún, Q. Roo",
+      "fechas": "16, 17, 18 y 21 de noviembre de 2026",
+      "horario": "11:30–13:00 o 18:00–19:30 · Hora de Cancún",
+      "lugar": "Hospital Galenia Cancún · Auditorio",
       "formato": "Presencial",
-      "cupo": "Limitado",
+      "cupo": "25 asientos por sesión",
       "costo": "Por confirmar"
     },
     "respaldo": "Programa diseñado con asesoría médica.",
@@ -145,7 +145,7 @@
   "registro": {
     "antetitulo": "Registro",
     "titulo": "Aparta tu lugar",
-    "texto": "Déjanos tus datos y te contactamos con todos los detalles del taller.",
+    "texto": "Completa tu registro. Al ingresar podrás elegir tu fecha, horario y asiento, según disponibilidad.",
     "imagen": "registro-lateral",
     "boton": "Registrarme",
     "micro": "Te enviaremos tu acceso a la biblioteca por correo.",
@@ -154,7 +154,7 @@
 
   "gracias": {
     "titulo": "¡Listo, {nombre}!",
-    "texto": "Ya eres parte de Cancún Cero Cáncer. Confirma tu lugar por WhatsApp y guarda el acceso a tu biblioteca.",
+    "texto": "Tu registro está listo. Elige arriba tu fecha, horario y asiento para obtener tu ticket. También conservas el acceso a tu biblioteca.",
     "mensajeWhatsapp": "Hola, me registré al taller de Cancún Cero Cáncer. Soy {nombre}."
   },
 

@@ -18,7 +18,7 @@
     var botones = "";
     if (c.whatsapp) {
       botones += '<a class="btn btn--whatsapp btn--bloque" href="' + C.linkWhatsApp(c.whatsapp, mensaje) +
-        '" target="_blank" rel="noopener">' + C.icono("whatsapp") + "Confirmar por WhatsApp</a>";
+        '" target="_blank" rel="noopener">' + C.icono("whatsapp") + "Consultar por WhatsApp</a>";
     }
     botones += '<a class="btn btn--primario btn--bloque" href="/biblioteca/">Ir a mi biblioteca</a>';
 

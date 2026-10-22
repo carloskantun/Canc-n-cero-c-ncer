@@ -6,6 +6,7 @@
   const origenes = { fb: "Facebook", ig: "Instagram", organico: "Orgánico" };
   function mensaje(texto) { $("mensaje").textContent = texto; }
   function salir() {
+    $("panel-tickets").hidden = true; $("filas-tickets").replaceChildren(); $("cupo-tickets").textContent = "";
     generacion++; clave = ""; contactos = []; ocupado = false;
     $("clave").value = ""; $("filas").replaceChildren(); $("total").textContent = "";
     $("buscar").value = ""; $("origen").value = "";
@@ -75,6 +76,46 @@
       if (turno === generacion) { ocupado = false; document.querySelectorAll("button").forEach(b => b.disabled = false); }
     }
   }
+  async function cargarTickets(csv = false) {
+    if (ocupado) return;
+    ocupado = true; const turno = generacion;
+    document.querySelectorAll("button:not(#salir)").forEach(b => b.disabled = true);
+    mensaje("Consultando tickets…");
+    try {
+      const respuesta = await fetch(`${window.CCC_CONFIG.apiBase}/admin/tickets${csv ? "?format=csv" : ""}`, {
+        headers: {Authorization: `Bearer ${clave}`}, cache: "no-store", referrerPolicy: "no-referrer", signal: AbortSignal.timeout(20000)
+      });
+      if (turno !== generacion) return;
+      if (respuesta.status === 401) { salir(); throw new Error("La clave no es válida."); }
+      if (!respuesta.ok) throw new Error("No fue posible consultar los tickets.");
+      if (csv) {
+        const blob = await respuesta.blob(); if (turno !== generacion) return;
+        const url = URL.createObjectURL(blob), enlace = document.createElement("a");
+        enlace.href = url; enlace.download = "cancuncerocancer-tickets.csv"; enlace.click();
+        setTimeout(() => URL.revokeObjectURL(url),1000); mensaje("Tickets descargados.");
+      } else {
+        const datos = await respuesta.json(); if (turno !== generacion) return;
+        const fecha = v => new Intl.DateTimeFormat("es-MX", {timeZone:"America/Cancun",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(new Date(v));
+        $("cupo-tickets").textContent = datos.sesiones.map(s => `${fecha(s.inicio)}: ${s.reservados}/${s.cupo} reservados`).join(" · ");
+        const fragmento = document.createDocumentFragment();
+        for (const t of datos.tickets) {
+          const fila = document.createElement("tr");
+          for (const valor of [fecha(t.inicio),t.asiento,t.nombre,t.whatsapp,t.estado,t.folio]) {
+            const celda = document.createElement("td"); celda.textContent = valor; fila.append(celda);
+          }
+          fragmento.append(fila);
+        }
+        $("filas-tickets").replaceChildren(fragmento); $("panel-tickets").hidden = false;
+        mensaje(`${datos.tickets.length} tickets, incluidas las cancelaciones.`);
+      }
+    } catch(error) {
+      if (turno === generacion || error.message === "La clave no es válida.") mensaje(error.message);
+    } finally {
+      if (turno === generacion) { ocupado = false; document.querySelectorAll("button").forEach(b => b.disabled = false); }
+    }
+  }
+  $("ver-tickets").addEventListener("click", () => cargarTickets());
+  $("exportar-tickets").addEventListener("click", () => cargarTickets(true));
   $("entrada").addEventListener("submit", e => { e.preventDefault(); clave = $("clave").value.trim(); cargar(); });
   $("actualizar").addEventListener("click", () => cargar());
   $("exportar").addEventListener("click", () => cargar(true));

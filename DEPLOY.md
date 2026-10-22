@@ -263,3 +263,27 @@ una conversación con el número mexicano registrado, y “Compartir con el doct
 abre WhatsApp para elegir destinatario con nombre y teléfono preparados.
 La persona que atiende revisa y confirma el envío. No usa WhatsApp API ni
 automatiza mensajes. El CSV permite compartir la lista completa por separado.
+
+## Tickets de noviembre de 2026
+
+Después del registro, `/gracias/` muestra automáticamente el selector; también
+está en `/biblioteca/#mis-tickets` para quienes ya tienen acceso. Ocho sesiones:
+16, 17, 18 y 21 de noviembre, 11:30–13:00 y 18:00–19:30, hora de Cancún
+(UTC−05:00), Hospital Galenia Cancún, Auditorio. Cada sesión tiene 25 asientos
+numerados A1–E5, cinco filas de cinco. Una reserva activa por persona; cancelar
+antes del inicio libera el asiento y permite elegir otra sesión. El ticket
+se puede guardar como texto; no se envía un segundo correo ni WhatsApp automático.
+
+Antes de desplegar esta versión en una base existente, exportar D1 a una
+carpeta privada y aplicar `worker/migrations/0002_tickets.sql`. Es aditiva e
+idempotente; no elimina registros ni altera el contenido de la biblioteca.
+Desplegar en orden: migración, Worker, sitio estático. `schema.sql` incluye
+las tablas para instalaciones nuevas. Pruebas: Node 22.13+ (SQLite integrado).
+
+`GET/POST /api/tickets` y `POST /api/tickets/cancelar` usan el token de acceso
+en `Authorization: Bearer`. El servidor asigna la identidad y protege cupo,
+asiento único y ticket único mediante restricciones y triggers de SQLite.
+`GET /api/admin/tickets` acepta las mismas claves del panel; `?format=csv`
+exporta reservas y cancelaciones. En `/admin/`, “Ver tickets” muestra cupos por
+sesión, asiento, contacto, estado y folio; “Descargar tickets CSV” exporta la lista.
+La reserva no genera un nuevo evento Lead de Meta.

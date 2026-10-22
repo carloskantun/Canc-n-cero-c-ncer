@@ -50,7 +50,7 @@ Las imágenes son ilustrativas generadas, no fotografías de participantes reale
 
 ## Contenido pendiente de la organización
 
-Fechas, horario y costo del taller; WhatsApp y redes; videos de YouTube; validación médica señalada por el propio contenido. No se inventaron valores ni se desbloquearon semanas futuras.
+Costo del taller; WhatsApp y redes; videos de YouTube; validación médica señalada por el propio contenido. No se inventaron valores ni se desbloquearon semanas futuras.
 
 
 ## Actualización Meta — 28-sep-2026
@@ -92,3 +92,10 @@ TCP y el resolvedor público de Google. El cambio no afecta al MX `send` de
 Resend. El MX anterior tenía TTL de 14400 segundos: algunas cachés pueden
 conservar Google hasta cuatro horas. Respaldo DNS previo fuera del repositorio.
 La prueba anterior de Resend rebotó antes del cambio; la prueba posterior fue entregada, como se documenta arriba.
+
+## Tickets — 22-oct-2026
+
+Ocho sesiones en noviembre de 2026 (16, 17, 18 y 21), 25 asientos A1–E5
+por sesión, en el Auditorio del Hospital Galenia. Migración aditiva
+`0002_tickets.sql`, con respaldo previo; publicar después Worker y sitio.
+Horarios, cancelación y operación administrativa detallados en DEPLOY.md.

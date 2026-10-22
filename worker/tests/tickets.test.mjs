@@ -1,0 +1,54 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {readFileSync} from 'node:fs';
+import {crearToken} from '../src/util.js';
+import {getTickets,postTicket,cancelarTicket,adminTickets} from '../src/rutas/tickets.js';
+
+function entorno() {
+ const db=new DatabaseSync(':memory:');
+ db.exec(readFileSync(new URL('../schema.sql',import.meta.url),'utf8'));
+ // Fechas futuras para que la prueba no caduque junto con el evento real.
+ db.exec("UPDATE sesiones SET inicio='2099-11-16T11:30:00-05:00'");
+ for(let i=1;i<=30;i++)db.prepare('INSERT INTO registros(nombre,email,whatsapp,token,token_creado) VALUES(?,?,?,?,?)').run('Persona '+i,i+'@example.invalid','9981234567','local-'+i,'2026-10-22');
+ const env={TOKEN_SECRETO:'solo-pruebas',ADMIN_KEY:'admin-pruebas',DB:{prepare(sql){return {bind(...args){return {first:async()=>db.prepare(sql).get(...args)||null,run:async()=>({meta:db.prepare(sql).run(...args)})};},all:async()=>({results:db.prepare(sql).all()})};}}};
+ return {db,env};
+}
+async function solicitud(env,id,cuerpo,ruta='/tickets') {
+ return new Request('https://example.invalid/api'+ruta,{method:cuerpo?'POST':'GET',headers:{Authorization:'Bearer '+await crearToken(env.TOKEN_SECRETO,id),'Content-Type':'application/json'},body:cuerpo?JSON.stringify(cuerpo):undefined});
+}
+test('tickets: autenticación, identidad, reintentos, concurrencia y cancelación propia',async()=>{
+ const {db,env}=entorno();
+ assert.equal((await getTickets(new Request('https://example.invalid'),env)).status,401);
+ assert.equal((await adminTickets(new Request('https://example.invalid'),env)).status,401);
+ const req=()=>solicitud(env,1,{sesion_id:'nov16-manana',asiento:1,registro_id:2});
+ const respuesta=await postTicket(await req(),env);assert.equal(respuesta.status,201);
+ const ticket=(await respuesta.json()).ticket;
+ assert.equal(db.prepare('SELECT registro_id FROM tickets').get().registro_id,1);
+ assert.equal((await postTicket(await req(),env)).status,200);
+ assert.equal(db.prepare('SELECT count(*) n FROM tickets').get().n,1);
+ assert.equal((await postTicket(await solicitud(env,1,{sesion_id:'nov17-manana',asiento:2}),env)).status,409);
+ assert.equal((await cancelarTicket(await solicitud(env,2,{id:ticket.id}),env)).status,409);
+ assert.equal((await cancelarTicket(await solicitud(env,1,{id:ticket.id}),env)).status,200);
+ const peticiones=await Promise.all([2,3].map(id=>solicitud(env,id,{sesion_id:'nov16-manana',asiento:1})));
+ const resultados=await Promise.all(peticiones.map(r=>postTicket(r,env)));
+ assert.deepEqual(resultados.map(r=>r.status).sort(),[201,409]);
+ const estado=await (await getTickets(await solicitud(env,4),env)).json();
+ assert.equal(estado.sesiones.length,8);assert.deepEqual(estado.sesiones[0].ocupados,[1]);
+ assert.equal(estado.sesiones[0].disponibles,24);
+ assert.throws(()=>db.prepare("UPDATE tickets SET estado='confirmado' WHERE id=?").run(ticket.id),/TICKET_INMUTABLE/);
+ db.close();
+});
+test('tickets: cupo de 25, asiento válido y sesión cerrada; exportación administrativa',async()=>{
+ const {db,env}=entorno();
+ for(let id=1;id<=25;id++)assert.equal((await postTicket(await solicitud(env,id,{sesion_id:'nov16-manana',asiento:id}),env)).status,201);
+ assert.equal((await postTicket(await solicitud(env,26,{sesion_id:'nov16-manana',asiento:1}),env)).status,409);
+ assert.equal((await postTicket(await solicitud(env,26,{sesion_id:'nov17-manana',asiento:26}),env)).status,400);
+ db.exec("UPDATE sesiones SET activa=0 WHERE id='nov17-manana'");
+ assert.equal((await postTicket(await solicitud(env,26,{sesion_id:'nov17-manana',asiento:1}),env)).status,409);
+ const csv=await adminTickets(new Request('https://example.invalid/api/admin/tickets?format=csv',{headers:{Authorization:'Bearer '+env.ADMIN_KEY}}),env);
+ assert.equal(csv.status,200);assert.match(await csv.text(),/"E5"/);
+ assert.equal(db.prepare('SELECT count(*) n FROM registros').get().n,30);
+ assert.deepEqual(db.prepare('PRAGMA foreign_key_check').all(),[]);
+ db.close();
+});
