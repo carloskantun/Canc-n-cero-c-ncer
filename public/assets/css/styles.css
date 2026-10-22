@@ -212,7 +212,7 @@ p { margin: 0 0 1em; }
   content: ""; position: absolute; inset: 0; z-index: -1;
   background: linear-gradient(180deg, rgba(10,50,56,0) 30%, rgba(10,50,56,.75) 100%);
 }
-@media (min-width: 1100px) {
+@media (min-width: 900px) {
   .hero { align-items: center; padding: 96px 0; }
   .hero::after { background: linear-gradient(90deg, rgba(10,50,56,.78) 0%, rgba(10,50,56,.35) 55%, rgba(10,50,56,0) 100%); }
 }
@@ -268,7 +268,7 @@ p { margin: 0 0 1em; }
 
 /* --- Taller ------------------------------------------------------------ */
 .taller { display: grid; gap: 32px; align-items: start; }
-@media (min-width: 1100px) { .taller { grid-template-columns: 1fr 1.05fr; gap: 56px; } }
+@media (min-width: 900px) { .taller { grid-template-columns: 1fr 1.05fr; gap: 56px; } }
 .datos { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
 .dato {
   background: var(--arena); border-radius: var(--radio-sm); padding: 14px 16px;
@@ -310,7 +310,7 @@ p { margin: 0 0 1em; }
 
 /* --- Categorías de ejercicio ----------------------------------------- */
 .categorias { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); margin-bottom: 40px; }
-@media (min-width: 1100px) { .categorias { grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 900px) { .categorias { grid-template-columns: repeat(5, 1fr); } }
 .categoria {
   position: relative; border-radius: var(--radio); overflow: hidden; color: var(--blanco);
   text-decoration: none; display: block; box-shadow: var(--sombra);
@@ -318,7 +318,7 @@ p { margin: 0 0 1em; }
 .categoria .media { border-radius: 0; aspect-ratio: 4 / 5; }
 .categoria:first-child { grid-column: span 2; }
 .categoria:first-child .media { aspect-ratio: 16 / 9; }
-@media (min-width: 1100px) {
+@media (min-width: 900px) {
   .categoria:first-child { grid-column: auto; }
   .categoria:first-child .media { aspect-ratio: 4 / 5; }
 }
@@ -395,9 +395,9 @@ p { margin: 0 0 1em; }
 .registro {
   display: grid; background: var(--blanco); border-radius: 28px; overflow: hidden; box-shadow: var(--sombra-hover);
 }
-@media (min-width: 1100px) { .registro { grid-template-columns: .9fr 1.1fr; } }
+@media (min-width: 900px) { .registro { grid-template-columns: .9fr 1.1fr; } }
 .registro__imagen { display: none; }
-@media (min-width: 1100px) { .registro__imagen { display: block; } .registro__imagen .media { height: 100%; border-radius: 0; } }
+@media (min-width: 900px) { .registro__imagen { display: block; } .registro__imagen .media { height: 100%; border-radius: 0; } }
 .registro__form { padding: 32px 22px; }
 @media (min-width: 700px) { .registro__form { padding: 48px; } }
 .campo { margin-bottom: 18px; }
