@@ -11,7 +11,7 @@
     var c = s.contacto || {};
 
     var yaTiene = guardado && guardado.token && !expirado
-      ? '<div class="aviso-form aviso-form--ok visible">Ya tienes acceso en este dispositivo. <a href="/biblioteca/">Entrar a mi cuenta</a></div>'
+      ? '<div class="aviso-form aviso-form--ok visible">Ya tienes acceso en este dispositivo. <a href="/cuenta/">Entrar a mi cuenta</a></div>'
       : "";
     var aviso = expirado
       ? '<div class="aviso-form aviso-form--error visible">Tu enlace ya no es válido. Pide uno nuevo con tu correo.</div>'

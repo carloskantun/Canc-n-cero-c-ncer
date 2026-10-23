@@ -59,7 +59,7 @@ export async function postRegistro(request, env, ctx) {
   }
 
   const tokenAcceso = await crearToken(env.TOKEN_SECRETO, idRegistro);
-  const enlaceBiblioteca = `${env.SITE_URL}/biblioteca/?t=${tokenAcceso}`;
+  const enlaceBiblioteca = `${env.SITE_URL}/cuenta/?t=${tokenAcceso}`;
 
   // El correo se manda sin bloquear la respuesta al navegador (más rápido para quien se registra).
   const registroParaMeta = { email, whatsapp, eventId: eventoId, fbp: cuerpo.fbp, fbc: cuerpo.fbc,

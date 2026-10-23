@@ -99,3 +99,10 @@ Ocho sesiones en noviembre de 2026 (16, 17, 18 y 21), 25 asientos A1–E5
 por sesión, en el Auditorio del Hospital Galenia. Migración aditiva
 `0002_tickets.sql`, con respaldo previo; publicar después Worker y sitio.
 Horarios, cancelación y operación administrativa detallados en DEPLOY.md.
+
+## Separación de cuenta y tickets visuales — 23-oct-2026
+
+Cuenta en `/cuenta/`, reservas en `/talleres/`, materiales en `/biblioteca/`.
+Migración `0003_tickets_correo_cancelacion.sql` aditiva, con respaldo previo.
+Ticket PNG descargable y correo transaccional; panel con fechas y WhatsApp manual.
+Cancelación bloquea a esa persona todo el día cancelado y libera el lugar al resto.

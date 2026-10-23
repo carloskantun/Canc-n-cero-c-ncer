@@ -109,7 +109,7 @@
       '<form id="form-registro" novalidate>' +
       '<div class="aviso-form aviso-form--error" id="form-aviso" role="alert"></div>' +
       campo("nombre", "Nombre completo", "text", 'autocomplete="name" maxlength="80"', "Escribe tu nombre.") +
-      campo("email", "Correo electrónico", "email", 'autocomplete="email" inputmode="email" maxlength="120"', "Escribe un correo válido.", "Será tu llave para entrar a la biblioteca.") +
+      campo("email", "Correo electrónico de uso habitual", "email", 'autocomplete="email" inputmode="email" maxlength="120"', "Escribe un correo válido.", "Usa un correo que revises con frecuencia: ahí recibirás tu acceso y tu ticket.") +
       '<div class="fila-2">' +
       '<div class="campo"><label for="f-whatsapp">WhatsApp</label><div class="prefijo"><span>+52</span>' +
       '<input id="f-whatsapp" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="10 dígitos" required></div>' +
@@ -242,6 +242,11 @@
         return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; });
       }).then(function (res) {
         if (!res.ok || !res.j.ok) throw new Error(res.j.mensaje || "No pudimos completar tu registro.");
+        if (!res.j.token) {
+          mostrarError("Si este correo ya está registrado, te enviamos un enlace para ingresar. Revisa tu bandeja y spam; también puedes usar Ingresar.");
+          boton.disabled=false;boton.textContent="Registrarme";
+          return;
+        }
         if (res.j.token) C.guardar("localStorage", "ccc_acceso", { token: res.j.token, nombre: datos.nombre });
         C.guardar("sessionStorage", "ccc_lead", { nombre: datos.nombre, eventId: res.j.evento_id || eventId, pendienteEvento: res.j.nuevo === true, correoHabilitado: !!res.j.correoHabilitado });
         location.href = "/gracias/";

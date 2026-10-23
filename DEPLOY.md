@@ -267,12 +267,12 @@ automatiza mensajes. El CSV permite compartir la lista completa por separado.
 ## Tickets de noviembre de 2026
 
 Después del registro, `/gracias/` muestra automáticamente el selector; también
-está en `/biblioteca/#mis-tickets` para quienes ya tienen acceso. Ocho sesiones:
+está en `/talleres/` para quienes ya tienen acceso. Ocho sesiones:
 16, 17, 18 y 21 de noviembre, 11:30–13:00 y 18:00–19:30, hora de Cancún
 (UTC−05:00), Hospital Galenia Cancún, Auditorio. Cada sesión tiene 25 asientos
 numerados A1–E5, cinco filas de cinco. Una reserva activa por persona; cancelar
-antes del inicio libera el asiento y permite elegir otra sesión. El ticket
-se puede guardar como texto; no se envía un segundo correo ni WhatsApp automático.
+antes del inicio libera el asiento y permite elegir otro día. Quien cancela queda bloqueado para todos los horarios de esa fecha. El ticket
+se descarga como imagen PNG desde un modal y se envía al correo del registro; no hay WhatsApp automático.
 
 Antes de desplegar esta versión en una base existente, exportar D1 a una
 carpeta privada y aplicar `worker/migrations/0002_tickets.sql`. Es aditiva e
@@ -289,7 +289,28 @@ sesión, asiento, contacto, estado y folio; “Descargar tickets CSV” exporta 
 La reserva no genera un nuevo evento Lead de Meta.
 
 El encabezado ofrece “Ingresar” (sin contraseña, enlace al correo) o “Mi cuenta”
-si hay acceso guardado, también en móvil. `/biblioteca/` es el área de cuenta:
-taller disponible, reserva/ticket y materiales. Esta experiencia es gratuita.
-Los cursos de pago futuros requieren integrar cobro y validar pago en servidor;
-no hay pasarela ni cobros habilitados en esta versión.
+si hay acceso guardado, también en móvil. `/cuenta/` ofrece dos entradas separadas:
+`/talleres/` para reserva y tickets, y `/biblioteca/` para materiales sin reserva.
+Los nuevos registros reciben token firmado y entran inmediatamente a `/gracias/`
+para elegir lugar; un correo previamente registrado requiere su enlace de acceso
+para evitar suplantaciones. No se crean eventos Lead al recuperar acceso.
+
+### Tickets visuales y correo — 23-oct-2026
+
+Respaldar D1 y aplicar `migrations/0003_tickets_correo_cancelacion.sql` antes del
+Worker. Agrega un trigger que impide reservar cualquier sesión del día cancelado,
+y `tickets_correos` para registrar envío aceptado, intentos y error. La reserva
+no depende del correo: se guarda antes de enviarlo. Un error conserva el asiento.
+`POST /api/tickets/correo`, autenticado por el participante, reintenta un envío
+pendiente; los envíos aceptados no se repiten. Resend usa una clave idempotente
+por folio; “enviado” indica aceptación del proveedor, no entrega en bandeja.
+
+El ticket se presenta en un modal al confirmar y se descarga en PNG. El correo
+contiene el ticket visual y un enlace a Talleres; no incluye contraseña ni token.
+El panel muestra fecha/hora del registro y reserva, fecha del evento, asiento,
+folio, cancelación y estado de correo. Permite ver/descargar la imagen y abrir
+WhatsApp con el mensaje preparado. Adjuntar la imagen y pulsar Enviar sigue
+siendo manual; no se comparte un enlace de acceso privado.
+
+Esta experiencia es gratuita. Los cursos de pago futuros requieren integrar
+cobro y validar el pago en servidor; no hay pasarela habilitada.

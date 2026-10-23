@@ -29,11 +29,6 @@
       })
       .then(function (data) {
         C.guardar("localStorage", "ccc_acceso", { token: token, nombre: data.nombre || guardado.nombre || "" });
-        var cuenta = C.$("#mi-cuenta");
-        cuenta.hidden = false;
-        cuenta.innerHTML = '<div class="contenedor"><span class="antetitulo">Mi cuenta</span><h1>Hola, ' + e(C.primerNombre(data.nombre)) + '</h1><p>Desde aquí puedes reservar tu experiencia y consultar tus materiales.</p><div class="rejilla rejilla--2"><article class="guia"><span class="antetitulo">Taller disponible · Gratuito</span><h2>Experiencia en Hospital Galenia</h2><p>' + e(s.taller.datos.fechas) + '<br>' + e(s.taller.datos.horario) + '<br>' + e(s.taller.datos.lugar) + '</p><p>Si todavía no elegiste tu lugar, puedes hacerlo ahora. Si ya reservaste, encontrarás tu ticket.</p><a class="btn btn--primario" href="#mis-tickets">Elegir lugar / Ver mi ticket</a></article><article class="guia"><span class="antetitulo">Tu biblioteca</span><h2>Ejercicios y guías</h2><p>Vuelve a consultar los materiales disponibles cuando los necesites.</p><a class="btn btn--contorno" href="#biblioteca">Abrir biblioteca</a></article></div><p><button class="btn btn--contorno btn--sm" id="cerrar-cuenta">Cerrar sesión</button></p></div>';
-        C.$("#cerrar-cuenta").onclick = function () { C.borrar("localStorage", "ccc_acceso"); C.borrar("sessionStorage", "ccc_lead"); location.replace("/acceso/"); };
-        C.pintarMarco(s);
         pintar(s, data);
       })
       .catch(function (err) {

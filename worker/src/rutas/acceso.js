@@ -24,10 +24,10 @@ export async function postAcceso(request, env, ctx) {
   const enviar = async () => {
     if (!registro) return; // correo no encontrado: no se hace nada, pero se responde ok igual
     const tokenAcceso = await crearToken(env.TOKEN_SECRETO, registro.id);
-    const enlaceBiblioteca = `${env.SITE_URL}/biblioteca/?t=${tokenAcceso}`;
+    const enlaceBiblioteca = `${env.SITE_URL}/cuenta/?t=${tokenAcceso}`;
     const resultado = await enviarCorreo(env, {
       para: email,
-      asunto: "Tu enlace a la biblioteca de Cancún Cero Cáncer",
+      asunto: "Tu acceso a Cancún Cero Cáncer",
       html: correoAcceso({ nombre: registro.nombre, enlaceBiblioteca, siteUrl: env.SITE_URL })
     });
     if (resultado.enviado) await env.DB.prepare("INSERT INTO envios (registro_id, tipo) VALUES (?, 'acceso')").bind(registro.id).run();

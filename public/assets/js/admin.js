@@ -6,7 +6,7 @@
   const origenes = { fb: "Facebook", ig: "Instagram", organico: "Orgánico" };
   function mensaje(texto) { $("mensaje").textContent = texto; }
   function salir() {
-    $("panel-tickets").hidden = true; $("filas-tickets").replaceChildren(); $("cupo-tickets").textContent = "";
+    document.getElementById("modal-ticket")?.remove(); $("panel-tickets").hidden = true; $("filas-tickets").replaceChildren(); $("cupo-tickets").textContent = "";
     generacion++; clave = ""; contactos = []; ocupado = false;
     $("clave").value = ""; $("filas").replaceChildren(); $("total").textContent = "";
     $("buscar").value = ""; $("origen").value = "";
@@ -95,14 +95,24 @@
         setTimeout(() => URL.revokeObjectURL(url),1000); mensaje("Tickets descargados.");
       } else {
         const datos = await respuesta.json(); if (turno !== generacion) return;
-        const fecha = v => new Intl.DateTimeFormat("es-MX", {timeZone:"America/Cancun",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(new Date(v));
+        const fecha = v => v ? new Intl.DateTimeFormat("es-MX", {timeZone:"America/Cancun",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(new Date(v.includes("T") ? v : v.replace(" ","T")+"Z")) : "—";
         $("cupo-tickets").textContent = datos.sesiones.map(s => `${fecha(s.inicio)}: ${s.reservados}/${s.cupo} reservados`).join(" · ");
         const fragmento = document.createDocumentFragment();
         for (const t of datos.tickets) {
           const fila = document.createElement("tr");
-          for (const valor of [fecha(t.inicio),t.asiento,t.nombre,t.whatsapp,t.estado,t.folio]) {
+          for (const valor of [fecha(t.inicio),t.asiento,t.nombre,t.whatsapp,t.estado,t.folio,fecha(t.registro_creado_en),fecha(t.creado_en),t.correo_enviado_en?"Enviado":t.correo_error?"Pendiente: "+t.correo_error:"Sin envío"]) {
             const celda = document.createElement("td"); celda.textContent = valor; fila.append(celda);
           }
+          const acciones=document.createElement("td"),ver=document.createElement("button");
+          ver.textContent="Ver / descargar ticket";ver.onclick=()=>window.CCCTicket.mostrar(t,t.nombre);acciones.append(ver);
+          const telefono=String(t.whatsapp||"").replace(/\D/g,"");
+          const numero=telefono.length===10?'52'+telefono:/^52\d{10}$/.test(telefono)?telefono:'';
+          if(numero && t.estado==='confirmado'){
+            const enlace=document.createElement('a');enlace.className='boton-contacto';enlace.textContent='Reenviar por WhatsApp';enlace.target='_blank';enlace.rel='noopener noreferrer';
+            const hora=v=>new Intl.DateTimeFormat('es-MX',{timeZone:'America/Cancun',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(v));
+            enlace.href='https://wa.me/'+numero+'?text='+encodeURIComponent('Hola '+t.nombre+', tu lugar en Cancún Cero Cáncer está confirmado.\n'+fecha(t.inicio)+'–'+hora(t.fin)+' (hora de Cancún)\n'+t.lugar+'\nAsiento: '+t.asiento+'\nFolio: '+t.folio+'\nEntrada gratuita. Consulta tu ticket en https://cancuncerocancer.com/talleres/');acciones.append(enlace);
+          }
+          fila.append(acciones);
           fragmento.append(fila);
         }
         $("filas-tickets").replaceChildren(fragmento); $("panel-tickets").hidden = false;
@@ -116,8 +126,8 @@
   }
   $("ver-tickets").addEventListener("click", () => cargarTickets());
   $("exportar-tickets").addEventListener("click", () => cargarTickets(true));
-  $("entrada").addEventListener("submit", e => { e.preventDefault(); clave = $("clave").value.trim(); cargar(); });
-  $("actualizar").addEventListener("click", () => cargar());
+  $("entrada").addEventListener("submit", e => { e.preventDefault(); clave = $("clave").value.trim(); cargar().then(() => { if (!$("panel").hidden) cargarTickets(); }); });
+  $("actualizar").addEventListener("click", () => cargar().then(() => { if (!$("panel").hidden) cargarTickets(); }));
   $("exportar").addEventListener("click", () => cargar(true));
   $("salir").addEventListener("click", salir);
   $("buscar").addEventListener("input", renderizar); $("origen").addEventListener("change", renderizar);

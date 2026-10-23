@@ -2,7 +2,7 @@
 // El sitio (HTML/CSS/JS) se sirve aparte, desde el hosting normal (VPS/Cloudflare Pages).
 // Este Worker solo atiende las rutas que necesitan servidor: registro, acceso y biblioteca.
 
-import { getTickets, postTicket, cancelarTicket, adminTickets } from "./rutas/tickets.js";
+import { getTickets, postTicket, cancelarTicket, adminTickets, reintentarCorreoTicket } from "./rutas/tickets.js";
 import { getLeads } from "./rutas/leads.js";
 import { json, preflight } from "./util.js";
 import { postRegistro } from "./rutas/registro.js";
@@ -21,6 +21,7 @@ export default {
     try {
       if (ruta === "/api/tickets" && metodo === "GET") return await getTickets(request, env);
       if (ruta === "/api/tickets" && metodo === "POST") return await postTicket(request, env);
+      if (ruta === "/api/tickets/correo" && metodo === "POST") return await reintentarCorreoTicket(request, env);
       if (ruta === "/api/tickets/cancelar" && metodo === "POST") return await cancelarTicket(request, env);
       if (ruta === "/api/admin/tickets" && metodo === "GET") return await adminTickets(request, env);
       if (ruta === "/api/leads" && metodo === "GET") return await getLeads(request, env);

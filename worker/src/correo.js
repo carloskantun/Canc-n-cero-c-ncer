@@ -7,7 +7,7 @@ export function correoHabilitado(env) {
 // configurado (wrangler secret), simplemente no se envía y se avisa en el log,
 // para que el sitio siga funcionando en desarrollo sin cuenta de correo.
 
-export async function enviarCorreo(env, { para, asunto, html }) {
+export async function enviarCorreo(env, { para, asunto, html, idempotencia }) {
   if (!correoHabilitado(env)) {
     console.log("[correo] Proveedor no configurado; no se envía.");
     return { enviado: false, motivo: "sin_configurar" };
@@ -16,8 +16,10 @@ export async function enviarCorreo(env, { para, asunto, html }) {
     method: "POST",
     headers: {
       authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "content-type": "application/json"
+      "content-type": "application/json",
+      ...(idempotencia ? {"Idempotency-Key": idempotencia} : {})
     },
+    signal: AbortSignal.timeout(12000),
     body: JSON.stringify({
       from: env.CORREO_REMITENTE || "Cancún Cero Cáncer <hola@cancuncerocancer.com>",
       to: [para],
@@ -54,9 +56,9 @@ export function correoBienvenida({ nombre, enlaceBiblioteca, siteUrl }) {
     "Bienvenida",
     `<h1 style="font-size:22px;margin:0 0 12px;">¡Hola${primerNombre ? ", " + primerNombre : ""}!</h1>
      <p style="font-size:16px;line-height:1.5;">Gracias por registrarte en <strong>Cancún Cero Cáncer</strong>. Ya eres parte del movimiento de mujeres que están cuidando su salud con actividad física, buena alimentación y prevención.</p>
-     <p style="font-size:16px;line-height:1.5;">Aquí está tu acceso permanente a la biblioteca de ejercicios y guías. Guarda este correo para volver cuando quieras.</p>
+     <p style="font-size:16px;line-height:1.5;">Aquí está tu acceso a tu cuenta, donde puedes reservar el taller y consultar la biblioteca. Guarda este correo para volver cuando quieras.</p>
      <p style="text-align:center;margin:28px 0;">
-       <a href="${enlaceBiblioteca}" style="background:#ef6f8e;color:#ffffff;text-decoration:none;font-weight:700;padding:14px 28px;border-radius:999px;display:inline-block;">Entrar a mi biblioteca</a>
+       <a href="${enlaceBiblioteca}" style="background:#ef6f8e;color:#ffffff;text-decoration:none;font-weight:700;padding:14px 28px;border-radius:999px;display:inline-block;">Entrar a mi cuenta</a>
      </p>
      <p style="font-size:13px;color:#5b6b70;">Si el botón no funciona, copia y pega este enlace en tu navegador:<br>${enlaceBiblioteca}</p>`,
     siteUrl
@@ -68,9 +70,9 @@ export function correoAcceso({ nombre, enlaceBiblioteca, siteUrl }) {
   return envoltorio(
     "Tu acceso",
     `<h1 style="font-size:22px;margin:0 0 12px;">Aquí está tu acceso${primerNombre ? ", " + primerNombre : ""}</h1>
-     <p style="font-size:16px;line-height:1.5;">Pediste entrar a la biblioteca de Cancún Cero Cáncer. Este enlace es personal, no lo compartas.</p>
+     <p style="font-size:16px;line-height:1.5;">Pediste entrar a tu cuenta de Cancún Cero Cáncer. Este enlace es personal, no lo compartas.</p>
      <p style="text-align:center;margin:28px 0;">
-       <a href="${enlaceBiblioteca}" style="background:#0e9aa7;color:#ffffff;text-decoration:none;font-weight:700;padding:14px 28px;border-radius:999px;display:inline-block;">Entrar a mi biblioteca</a>
+       <a href="${enlaceBiblioteca}" style="background:#0e9aa7;color:#ffffff;text-decoration:none;font-weight:700;padding:14px 28px;border-radius:999px;display:inline-block;">Entrar a mi cuenta</a>
      </p>
      <p style="font-size:13px;color:#5b6b70;">Si el botón no funciona, copia y pega este enlace en tu navegador:<br>${enlaceBiblioteca}</p>`,
     siteUrl
@@ -79,4 +81,11 @@ export function correoAcceso({ nombre, enlaceBiblioteca, siteUrl }) {
 
 function escaparHtml(valor) {
   return String(valor).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+export function correoTicket({nombre,ticket,siteUrl}) {
+ const fecha=new Intl.DateTimeFormat('es-MX',{timeZone:'America/Cancun',weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date(ticket.inicio));
+ const hora=v=>new Intl.DateTimeFormat('es-MX',{timeZone:'America/Cancun',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(v));
+ const asiento=String.fromCharCode(65+Math.floor((ticket.asiento-1)/5))+((ticket.asiento-1)%5+1);
+ return envoltorio('Tu ticket',`<h1 style="color:#0a7580">Tu lugar está confirmado</h1><p>${escaparHtml(nombre)}</p><p><strong>${escaparHtml(fecha)}</strong><br>${hora(ticket.inicio)}–${hora(ticket.fin)} · Hora de Cancún</p><p>${escaparHtml(ticket.lugar)}</p><p style="font-size:28px;color:#0a7580">Asiento <strong>${asiento}</strong></p><p>Entrada gratuita · Una persona</p><p style="word-break:break-all">Folio: ${escaparHtml(ticket.id)}</p><p>Guarda este correo y descarga el ticket desde tu cuenta para presentarlo al llegar.</p><p><a href="${siteUrl}/talleres/">Ver y descargar mi ticket</a></p><p>Si cancelas, este ticket deja de ser válido y no podrás reservar de nuevo en esa fecha. Consulta siempre el estado actual en tu cuenta.</p>`,siteUrl);
 }

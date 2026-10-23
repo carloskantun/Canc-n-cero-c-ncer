@@ -199,7 +199,7 @@
       header.className = "header";
       header.innerHTML = '<div class="contenedor header__fila">' + marca() +
         '<nav class="nav" aria-label="Principal">' + nav + "</nav>" +
-        '<div class="header__acceso"><a class="btn btn--contorno btn--sm" href="' + (tieneAcceso ? '/biblioteca/' : '/acceso/') + '">' + (tieneAcceso ? 'Mi cuenta' : 'Ingresar') + '</a><a class="btn btn--primario btn--sm" href="/#registro">Regístrate</a></div></div>';
+        '<div class="header__acceso"><a class="btn btn--contorno btn--sm" href="' + (tieneAcceso ? '/cuenta/' : '/acceso/') + '">' + (tieneAcceso ? 'Mi cuenta' : 'Ingresar') + '</a><a class="btn btn--primario btn--sm" href="/#registro">Regístrate</a></div></div>';
       var sombra = function () { header.classList.toggle("con-sombra", window.scrollY > 8); };
       window.addEventListener("scroll", sombra, { passive: true });
       sombra();

@@ -1,5 +1,5 @@
 /* Página de gracias: confirma el registro, dispara el evento Lead (una sola vez)
-   y ofrece confirmar por WhatsApp e ir a la biblioteca. */
+   y ofrece abrir la cuenta o la biblioteca. */
 (function () {
   "use strict";
   var C = window.CCC;
@@ -20,7 +20,7 @@
       botones += '<a class="btn btn--whatsapp btn--bloque" href="' + C.linkWhatsApp(c.whatsapp, mensaje) +
         '" target="_blank" rel="noopener">' + C.icono("whatsapp") + "Consultar por WhatsApp</a>";
     }
-    botones += '<a class="btn btn--primario btn--bloque" href="/biblioteca/">Ir a mi biblioteca</a>';
+    botones += '<a class="btn btn--primario btn--bloque" href="/cuenta/">Mi cuenta</a><a class="btn btn--contorno btn--bloque" href="/biblioteca/">Abrir biblioteca</a>';
 
     C.$("#caja-gracias").innerHTML =
       '<div class="caja__icono">' + C.icono("check") + "</div>" +

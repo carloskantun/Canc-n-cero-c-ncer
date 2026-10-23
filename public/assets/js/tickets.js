@@ -22,19 +22,18 @@
   var caja=document.getElementById('ticket-contenido');
   if(datos.ticket){
    var t=datos.ticket;
-   caja.innerHTML='<article class="ticket-confirmado"><span class="antetitulo">Reserva confirmada</span><h3>'+e(datos.nombre)+'</h3><p>'+e(fecha(t.inicio))+'<br><strong>'+hora(t.inicio)+'–'+hora(t.fin)+' · Asiento '+etiqueta(t.asiento)+'</strong><br>'+e(t.lugar)+'</p><p class="ticket-folio">Folio: '+e(t.id)+'</p><p>Guarda tu ticket y preséntalo al llegar. El asiento pertenece a esta fecha y horario.</p><div class="botones"><button class="btn btn--primario" id="ticket-descargar">Guardar ticket</button><button class="btn btn--contorno" id="ticket-cancelar">Cancelar reserva</button><a class="btn btn--contorno" href="/biblioteca/#biblioteca">Ver biblioteca</a></div><p id="ticket-confirmacion" hidden>¿Deseas liberar tu asiento? Para cambiar de horario tendrás que reservar de nuevo según disponibilidad. <button class="btn btn--contorno btn--sm" id="ticket-cancelar-si">Sí, cancelar</button> <button class="btn btn--contorno btn--sm" id="ticket-cancelar-no">Conservar mi reserva</button></p></article>';
-   document.getElementById('ticket-descargar').onclick=function(){
-    var contenido=['Cancún Cero Cáncer — Ticket confirmado',datos.nombre,fecha(t.inicio),hora(t.inicio)+'–'+hora(t.fin)+' (hora de Cancún)',t.lugar,'Asiento: '+etiqueta(t.asiento),'Folio: '+t.id,'Presenta este ticket al llegar.'].join('\n');
-    var url=URL.createObjectURL(new Blob([contenido],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='ticket-'+etiqueta(t.asiento)+'.txt';a.click();setTimeout(function(){URL.revokeObjectURL(url);},1000);
-   };
+   caja.innerHTML='<article class="ticket-confirmado"><span class="antetitulo">Reserva confirmada</span><h3>'+e(datos.nombre)+'</h3><p>'+e(fecha(t.inicio))+'<br><strong>'+hora(t.inicio)+'–'+hora(t.fin)+' · Asiento '+etiqueta(t.asiento)+'</strong><br>'+e(t.lugar)+'</p><p class="ticket-folio">Folio: '+e(t.id)+'</p><p>Guarda tu ticket y preséntalo al llegar. El asiento pertenece a esta fecha y horario.</p><div class="botones"><button class="btn btn--primario" id="ticket-descargar">Guardar ticket</button><button class="btn btn--contorno" id="ticket-cancelar">Cancelar reserva</button><a class="btn btn--contorno" href="/biblioteca/#biblioteca">Ver biblioteca</a></div><p id="ticket-confirmacion" hidden>¿Deseas liberar tu asiento? Al cancelar liberas tu asiento y no podrás reservar nuevamente ese mismo día, en ninguno de sus horarios. Podrás elegir otra fecha según disponibilidad. <button class="btn btn--contorno btn--sm" id="ticket-cancelar-si">Sí, cancelar</button> <button class="btn btn--contorno btn--sm" id="ticket-cancelar-no">Conservar mi reserva</button></p></article>';
+   document.getElementById('ticket-descargar').onclick=function(){window.CCCTicket.mostrar(t,datos.nombre);};
+   var correo=document.createElement('p');correo.textContent=t.correo && t.correo.enviado_en?'Ticket enviado al correo de tu registro. Revisa también spam.':'Tu asiento está guardado, pero el correo del ticket no se ha confirmado.';caja.append(correo);
+   if(!t.correo || !t.correo.enviado_en){var reenvio=document.createElement('button');reenvio.className='btn btn--contorno';reenvio.textContent='Reintentar envío al correo';reenvio.onclick=function(){mutar('/tickets/correo',{},'Estado del envío actualizado.');};caja.append(reenvio);}
    document.getElementById('ticket-cancelar').onclick=function(){document.getElementById('ticket-confirmacion').hidden=false;};
    document.getElementById('ticket-cancelar-no').onclick=function(){document.getElementById('ticket-confirmacion').hidden=true;};
-   document.getElementById('ticket-cancelar-si').onclick=function(){mutar('/tickets/cancelar',{id:t.id},'Tu reserva fue cancelada. Puedes elegir otro horario.');};
+   document.getElementById('ticket-cancelar-si').onclick=function(){mutar('/tickets/cancelar',{id:t.id},'Tu reserva fue cancelada. Puedes elegir otra fecha, excepto el día que cancelaste.');};
    return;
   }
-  caja.innerHTML='<label for="ticket-sesion"><strong>1. Fecha y horario</strong></label><select id="ticket-sesion"><option value="">Selecciona una sesión</option>'+datos.sesiones.map(function(s){return '<option value="'+e(s.id)+'" '+(!s.abierta || s.disponibles===0?'disabled':'')+'>'+e(fecha(s.inicio))+' · '+hora(s.inicio)+'–'+hora(s.fin)+' · '+(s.abierta?s.disponibles+' lugares':'Cerrada')+'</option>';}).join('')+'</select><div id="ticket-plano"></div><div class="botones"><button class="btn btn--contorno btn--sm" id="ticket-actualizar">Actualizar lugares</button></div>';
+  caja.innerHTML='<label for="ticket-sesion"><strong>1. Fecha y horario</strong></label><select id="ticket-sesion"><option value="">Selecciona una sesión</option>'+datos.sesiones.map(function(s){return '<option value="'+e(s.id)+'" '+(!s.abierta || s.disponibles===0 || s.bloqueada?'disabled':'')+'>'+e(fecha(s.inicio))+' · '+hora(s.inicio)+'–'+hora(s.fin)+' · '+(s.bloqueada?'No disponible: cancelaste esta fecha':s.abierta?s.disponibles+' lugares':'Cerrada')+'</option>';}).join('')+'</select><div id="ticket-plano"></div><div class="botones"><button class="btn btn--contorno btn--sm" id="ticket-actualizar">Actualizar lugares</button></div>';
   var selector=document.getElementById('ticket-sesion');
-  if(datos.sesiones.some(function(s){return s.id===seleccion && s.abierta && s.disponibles>0;}))selector.value=seleccion;else {seleccion="";asiento=0;}
+  if(datos.sesiones.some(function(s){return s.id===seleccion && s.abierta && s.disponibles>0 && !s.bloqueada;}))selector.value=seleccion;else {seleccion="";asiento=0;}
   selector.onchange=function(){seleccion=selector.value;asiento=0;plano();};
   document.getElementById('ticket-actualizar').onclick=function(){cargar();};
   plano();
@@ -52,18 +51,20 @@
  async function mutar(ruta,cuerpo,texto){
   if(ocupado)return;ocupado=true;
   raiz.querySelectorAll('button,input,select').forEach(function(x){x.disabled=true;});aviso('Procesando…');
-  try{datos=await api(ruta,cuerpo);seleccion='';asiento=0;pintar();aviso(texto);}
+  try{datos=await api(ruta,cuerpo);seleccion='';asiento=0;pintar();aviso(texto);if(ruta==='/tickets' && datos.ticket)window.CCCTicket.mostrar(datos.ticket,datos.nombre);}
   catch(err){
    // Ante respuesta perdida consultar el servidor antes de permitir otro intento.
-   try{datos=await api('/tickets');pintar();aviso(datos.ticket?'Tu reserva está confirmada; aquí está tu ticket.':err.message);}
+   try{datos=await api('/tickets');pintar();aviso(datos.ticket?'Tu reserva está confirmada; aquí está tu ticket.':err.message);if(ruta==='/tickets' && datos.ticket)window.CCCTicket.mostrar(datos.ticket,datos.nombre);}
    catch(_){raiz.innerHTML='<div class="contenedor"><p role="alert">No pudimos confirmar el resultado. Actualiza para consultar tu reserva antes de intentarlo otra vez.</p><button class="btn btn--contorno" id="ticket-reintentar">Consultar mi reserva</button></div>';document.getElementById('ticket-reintentar').onclick=cargar;}
   }finally{ocupado=false;}
  }
  async function cargar(){
   raiz.innerHTML='<div class="contenedor"><p role="status">Consultando tus tickets y los lugares disponibles…</p></div>';
   if(!token){raiz.innerHTML='<div class="contenedor"><h2>Reserva tu lugar</h2><p>Ingresa con tu enlace de correo para elegir fecha, horario y asiento.</p><a class="btn btn--primario" href="/acceso/">Ingresar</a></div>';return;}
-  try{datos=await api('/tickets');pintar();}
+  try{datos=await api('/tickets');C.guardar('localStorage','ccc_acceso',{token:token,nombre:datos.nombre});pintar();}
   catch(err){raiz.innerHTML='<div class="contenedor"><p role="alert">'+e(err.message)+'</p>'+(err.status===401?'<a class="btn btn--primario" href="/acceso/?expirado=1">Solicitar acceso</a>':'<button class="btn btn--contorno" id="ticket-reintentar">Reintentar</button>')+'</div>';var b=document.getElementById('ticket-reintentar');if(b)b.onclick=cargar;}
  }
+ // Actualizar lugares al volver a la pestaña, sin interrumpir una confirmación.
+ document.addEventListener('visibilitychange',function(){if(!document.hidden && !ocupado)cargar();});
  cargar();
 })();
