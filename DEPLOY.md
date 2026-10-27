@@ -321,3 +321,12 @@ Aplicar `migrations/0004_cancelacion_por_sesion.sql` tras respaldar D1.
 Reemplaza el trigger de bloqueo por día: solo impide repetir la sesión cancelada,
 y permite el otro horario del mismo día. No modifica tickets ni registros.
 Desplegar después Worker y sitio para actualizar disponibilidad y mensajes.
+
+## QR y enlace corto de registro
+
+`https://cancuncerocancer.com/r` redirige con 302 al formulario `/#registro`,
+con atribución UTM qr/impreso/taller_galenia. El QR público codifica ese enlace
+corto y está en `/assets/qr/registro.png`. No contiene datos personales ni tokens.
+Después del registro nuevo se inicia sesión y `/gracias/` permite reservar
+fecha, horario y asiento. Un correo ya registrado debe usar su enlace de acceso.
+El lugar solo queda reservado al confirmar y recibir el ticket.
