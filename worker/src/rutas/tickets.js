@@ -15,7 +15,7 @@ const consultaTicket = `SELECT t.id,t.sesion_id,t.asiento,t.estado,t.creado_en,s
 async function estado(env, persona) {
  const { results: sesiones } = await env.DB.prepare(`SELECT s.*,
  MAX(0,s.cupo-(SELECT COUNT(*) FROM tickets t WHERE t.sesion_id=s.id AND t.estado='confirmado')) AS disponibles,
- CASE WHEN EXISTS(SELECT 1 FROM tickets cancelado JOIN sesiones sc ON sc.id=cancelado.sesion_id WHERE cancelado.registro_id=? AND cancelado.estado='cancelado' AND substr(sc.inicio,1,10)=substr(s.inicio,1,10)) THEN 1 ELSE 0 END AS bloqueada,
+ CASE WHEN EXISTS(SELECT 1 FROM tickets cancelado WHERE cancelado.registro_id=? AND cancelado.estado='cancelado' AND cancelado.sesion_id=s.id) THEN 1 ELSE 0 END AS bloqueada,
  CASE WHEN s.activa=1 AND julianday(s.inicio)>julianday('now') THEN 1 ELSE 0 END AS abierta
  FROM sesiones s ORDER BY s.inicio`).bind(persona.id).all();
  const {results:ocupados}=await env.DB.prepare("SELECT sesion_id,asiento FROM tickets WHERE estado='confirmado'").all();
@@ -37,7 +37,7 @@ export async function postTicket(request, env) {
  if (!Number.isInteger(cuerpo.asiento) || cuerpo.asiento<1 || cuerpo.asiento>25) return json({ok:false,mensaje:'Selecciona un asiento válido.'},400);
  const actual=await env.DB.prepare(consultaTicket).bind(persona.id).first();
  if (actual) {
-  if(actual.sesion_id!==cuerpo.sesion_id || actual.asiento!==cuerpo.asiento) return json({ok:false,mensaje:'Ya tienes una reserva. Cancélala antes de elegir otra fecha.'},409);
+  if(actual.sesion_id!==cuerpo.sesion_id || actual.asiento!==cuerpo.asiento) return json({ok:false,mensaje:'Ya tienes una reserva. Cancélala antes de elegir otra sesión.'},409);
   await enviarTicket(env,persona,actual);return json(await estado(env,persona));
  }
  try {
@@ -47,7 +47,7 @@ export async function postTicket(request, env) {
   // Un reintento concurrente debe devolver el mismo ticket, nunca ocupar otro lugar.
   const existente=await env.DB.prepare(consultaTicket).bind(persona.id).first();
   if (existente?.sesion_id===cuerpo.sesion_id && existente.asiento===cuerpo.asiento) {await enviarTicket(env,persona,existente);return json(await estado(env,persona));}
-  if (/FECHA_CANCELADA/.test(String(error))) return json({ok:false,mensaje:'Cancelaste una reserva en esta fecha. Elige otro día.'},409);
+  if (/SESION_CANCELADA/.test(String(error))) return json({ok:false,mensaje:'Cancelaste esta sesión. Elige otro horario o fecha.'},409);
   if (existente || /SESION_NO_DISPONIBLE|UNIQUE constraint/.test(String(error))) return json({ok:false,mensaje:'No se pudo reservar: el asiento fue ocupado, el horario cerró o ya tienes un ticket. Actualiza la disponibilidad.'},409);
   throw error;
  }

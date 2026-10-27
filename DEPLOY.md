@@ -271,7 +271,7 @@ está en `/talleres/` para quienes ya tienen acceso. Ocho sesiones:
 16, 17, 18 y 21 de noviembre, 11:30–13:00 y 18:00–19:30, hora de Cancún
 (UTC−05:00), Hospital Galenia Cancún, Auditorio. Cada sesión tiene 25 asientos
 numerados A1–E5, cinco filas de cinco. Una reserva activa por persona; cancelar
-antes del inicio libera el asiento y permite elegir otro día. Quien cancela queda bloqueado para todos los horarios de esa fecha. El ticket
+antes del inicio libera el asiento y permite elegir otra sesión. Quien cancela queda bloqueado únicamente para esa sesión; puede elegir otro horario del mismo día. El ticket
 se descarga como imagen PNG desde un modal y se envía al correo del registro; no hay WhatsApp automático.
 
 Antes de desplegar esta versión en una base existente, exportar D1 a una
@@ -298,7 +298,7 @@ para evitar suplantaciones. No se crean eventos Lead al recuperar acceso.
 ### Tickets visuales y correo — 23-oct-2026
 
 Respaldar D1 y aplicar `migrations/0003_tickets_correo_cancelacion.sql` antes del
-Worker. Agrega un trigger que impide reservar cualquier sesión del día cancelado,
+Worker. Agrega un trigger que registraba el bloqueo del día cancelado (sustituido por la migración 0004),
 y `tickets_correos` para registrar envío aceptado, intentos y error. La reserva
 no depende del correo: se guarda antes de enviarlo. Un error conserva el asiento.
 `POST /api/tickets/correo`, autenticado por el participante, reintenta un envío
@@ -314,3 +314,10 @@ siendo manual; no se comparte un enlace de acceso privado.
 
 Esta experiencia es gratuita. Los cursos de pago futuros requieren integrar
 cobro y validar el pago en servidor; no hay pasarela habilitada.
+
+### Corrección de cancelación — 27-oct-2026
+
+Aplicar `migrations/0004_cancelacion_por_sesion.sql` tras respaldar D1.
+Reemplaza el trigger de bloqueo por día: solo impide repetir la sesión cancelada,
+y permite el otro horario del mismo día. No modifica tickets ni registros.
+Desplegar después Worker y sitio para actualizar disponibilidad y mensajes.

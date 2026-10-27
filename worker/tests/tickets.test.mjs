@@ -30,9 +30,12 @@ test('tickets: autenticación, identidad, reintentos, concurrencia y cancelació
  assert.equal((await postTicket(await solicitud(env,1,{sesion_id:'nov17-manana',asiento:2}),env)).status,409);
  assert.equal((await cancelarTicket(await solicitud(env,2,{id:ticket.id}),env)).status,409);
  assert.equal((await cancelarTicket(await solicitud(env,1,{id:ticket.id}),env)).status,200);
+ const trasCancelar=await (await getTickets(await solicitud(env,1),env)).json();
+ assert.equal(trasCancelar.sesiones.find(s=>s.id==='nov16-manana').bloqueada,1);
+ assert.equal(trasCancelar.sesiones.find(s=>s.id==='nov16-tarde').bloqueada,0);
  assert.equal((await postTicket(await req(),env)).status,409);
- assert.equal((await postTicket(await solicitud(env,1,{sesion_id:'nov16-tarde',asiento:5}),env)).status,409);
- assert.equal((await postTicket(await solicitud(env,1,{sesion_id:'nov17-manana',asiento:5}),env)).status,201);
+ assert.equal((await postTicket(await solicitud(env,1,{sesion_id:'nov16-tarde',asiento:5}),env)).status,201);
+ assert.equal((await postTicket(await solicitud(env,1,{sesion_id:'nov17-manana',asiento:5}),env)).status,409);
  const peticiones=await Promise.all([2,3].map(id=>solicitud(env,id,{sesion_id:'nov16-manana',asiento:1})));
  const resultados=await Promise.all(peticiones.map(r=>postTicket(r,env)));
  assert.deepEqual(resultados.map(r=>r.status).sort(),[201,409]);

@@ -131,14 +131,13 @@ CREATE TABLE IF NOT EXISTS tickets_correos (
  intentos INTEGER NOT NULL DEFAULT 0,
  ultimo_error TEXT
 );
--- Una cancelación libera el asiento, pero bloquea ese día a quien canceló.
-CREATE TRIGGER IF NOT EXISTS tickets_fecha_cancelada
+-- Sustituye el bloqueo por día por un bloqueo de la sesión cancelada.
+DROP TRIGGER IF EXISTS tickets_fecha_cancelada;
+CREATE TRIGGER IF NOT EXISTS tickets_sesion_cancelada
 BEFORE INSERT ON tickets WHEN NEW.estado='confirmado'
 BEGIN
  SELECT CASE WHEN EXISTS (
-  SELECT 1 FROM tickets t JOIN sesiones anterior ON anterior.id=t.sesion_id
-  JOIN sesiones nueva ON nueva.id=NEW.sesion_id
-  WHERE t.registro_id=NEW.registro_id AND t.estado='cancelado'
-  AND substr(anterior.inicio,1,10)=substr(nueva.inicio,1,10)
- ) THEN RAISE(ABORT,'FECHA_CANCELADA') END;
+  SELECT 1 FROM tickets t WHERE t.registro_id=NEW.registro_id
+  AND t.estado='cancelado' AND t.sesion_id=NEW.sesion_id
+ ) THEN RAISE(ABORT,'SESION_CANCELADA') END;
 END;

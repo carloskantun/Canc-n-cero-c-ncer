@@ -106,3 +106,8 @@ Cuenta en `/cuenta/`, reservas en `/talleres/`, materiales en `/biblioteca/`.
 Migración `0003_tickets_correo_cancelacion.sql` aditiva, con respaldo previo.
 Ticket PNG descargable y correo transaccional; panel con fechas y WhatsApp manual.
 Cancelación bloquea a esa persona todo el día cancelado y libera el lugar al resto.
+
+## Cancelación por sesión — 27-oct-2026
+
+La migración 0004 sustituye el bloqueo de todo el día descrito arriba.
+Solo queda bloqueada la sesión cancelada; el otro horario sigue disponible.
